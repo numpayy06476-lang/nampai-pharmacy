@@ -16,7 +16,6 @@
             body { background: white !important; color: black !important; font-size: 10pt; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
             .print-page { page-break-after: always !important; break-after: page !important; clear: both !important; display: block !important; }
-            .hidden-print { display: none !important; }
             table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; margin-bottom: 15px !important; }
             th, td { border: 1px solid #000000 !important; padding: 4px 6px !important; word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 9pt !important; }
             th { background-color: #f1f5f9 !important; font-weight: bold !important; text-align: center !important; }
@@ -196,20 +195,21 @@
                         <p class="text-xs text-slate-400 mt-2" id="dash-sub-items">0 รายการ</p>
                     </div>
 
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <!-- Clickable Alert Card -->
+                    <div onclick="openAlertModal()" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-amber-400 transition group">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-slate-500 text-xs font-medium">เตือนสต็อกต่ำ / ใกล้หมดอายุ</p>
+                                <p class="text-slate-500 text-xs font-medium group-hover:text-amber-600 transition">เตือนสต็อกต่ำ / ใกล้หมดอายุ</p>
                                 <h3 class="text-2xl font-bold text-amber-600 mt-1" id="dash-alert-count">0</h3>
                             </div>
-                            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
+                            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg group-hover:bg-amber-100 transition"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                         </div>
-                        <p class="text-xs text-amber-600 mt-2">รายการที่ต้องรีบสำรองเพิ่ม</p>
+                        <p class="text-xs text-amber-600 mt-2 flex items-center gap-1 font-medium">คลิกเพื่อดูรายการแจ้งเตือน <i class="fa-solid fa-arrow-right text-[10px]"></i></p>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-4">
                         <div>
                             <h2 class="text-base font-bold text-slate-700 flex items-center gap-2">
                                 <i class="fa-solid fa-print text-emerald-600"></i> พิมพ์ใบเบิกยาสรุปประจำเดือน (คำนวณมูลค่าเงินบาท)
@@ -217,10 +217,30 @@
                             <p class="text-xs text-slate-500">ออกเอกสารใบเบิกยารวมเฉพาะรายการที่ถูกตัดโอนออกจากคลังใหญ่ ส่ง ผอ.รพ.สต.น้ำปาย</p>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <input type="month" id="report-month" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+                            <input type="month" id="report-month" onchange="renderDashboardPreview()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
                             <button onclick="printMonthlyReport()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 whitespace-nowrap shadow-sm">
                                 <i class="fa-solid fa-print"></i> พิมพ์ใบเบิกประจำเดือน
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Monthly Preview Table -->
+                    <div>
+                        <h3 class="font-bold text-xs text-slate-600 mb-2 flex items-center gap-1"><i class="fa-solid fa-table-list text-emerald-600"></i> พรีวิวรายการเบิกโอนประจำเดือนที่จะนำไปพิมพ์</h3>
+                        <div class="overflow-x-auto border border-slate-200 rounded-lg">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-600 border-b">
+                                    <tr>
+                                        <th class="p-2.5">ลำดับ</th>
+                                        <th class="p-2.5">รายการยา</th>
+                                        <th class="p-2.5 text-center">หน่วยนับ</th>
+                                        <th class="p-2.5 text-right">จำนวนเบิก</th>
+                                        <th class="p-2.5 text-right">ราคา/หน่วย</th>
+                                        <th class="p-2.5 text-right">ราคารวม</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-preview-table" class="divide-y divide-slate-100"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -235,9 +255,14 @@
                         </h2>
                         <p class="text-xs text-slate-500">รับยาและเวชภัณฑ์จาก รพ.แม่ข่าย เข้าเก็บคลังศูนย์กลาง</p>
                     </div>
-                    <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
-                        <i class="fa-solid fa-plus"></i> บันทึกรับยาเข้าคลังใหญ่
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="printMainStockSummary()" class="bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-print"></i> พิมพ์สรุปมูลค่าคงเหลือคลังใหญ่
+                        </button>
+                        <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-plus"></i> บันทึกรับยาเข้าคลังใหญ่
+                        </button>
+                    </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
@@ -254,17 +279,28 @@
                             </tr>
                         </thead>
                         <tbody id="main-stock-table" class="divide-y divide-slate-100"></tbody>
+                        <tfoot class="bg-slate-50 font-bold border-t">
+                            <tr>
+                                <td colspan="4" class="p-3 text-right">มูลค่ารวมทุกรายการในคลังใหญ่:</td>
+                                <td colspan="3" class="p-3 text-blue-600 text-base" id="main-total-sum-footer">฿0.00</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
 
             <!-- SUB STORE -->
             <div id="tab-sub-store" class="tab-content hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-store text-indigo-600"></i> คลังย่อย (Sub-Stock / ห้องจ่ายยา OPD)
-                    </h2>
-                    <p class="text-xs text-slate-500">ยาสมุนไพร/เวชภัณฑ์ที่รับโอนจากคลังใหญ่เข้ามาพร้อมใช้งาน</p>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex justify-between items-center">
+                    <div>
+                        <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-store text-indigo-600"></i> คลังย่อย (Sub-Stock / ห้องจ่ายยา OPD)
+                        </h2>
+                        <p class="text-xs text-slate-500">ยาสมุนไพร/เวชภัณฑ์ที่รับโอนจากคลังใหญ่เข้ามาพร้อมใช้งาน</p>
+                    </div>
+                    <button onclick="printSubStockSummary()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-print"></i> พิมพ์สรุปมูลค่าคงเหลือคลังย่อย
+                    </button>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
@@ -276,10 +312,17 @@
                                 <th class="p-3 text-right">คงเหลือคลังย่อย</th>
                                 <th class="p-3 text-right">ราคา/หน่วย (บาท)</th>
                                 <th class="p-3 text-right">มูลค่ารวม (บาท)</th>
+                                <th class="p-3">Lot ยาอ้างอิง</th>
                                 <th class="p-3 text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="sub-stock-table" class="divide-y divide-slate-100"></tbody>
+                        <tfoot class="bg-slate-50 font-bold border-t">
+                            <tr>
+                                <td colspan="4" class="p-3 text-right">มูลค่ารวมทุกรายการในคลังย่อย:</td>
+                                <td colspan="3" class="p-3 text-indigo-600 text-base" id="sub-total-sum-footer">฿0.00</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -296,10 +339,14 @@
 
                     <form id="transfer-form" onsubmit="handleTransfer(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">พิมพ์ค้นหาหรือเลือกรายการยาในคลังใหญ่ *</label>
-                            <input type="text" id="transfer-drug-search" list="transfer-drug-options" placeholder="พิมพ์ชื่อยาเพื่อค้นหา..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required oninput="onTransferDrugSelected()">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">พิมพ์ค้นหาหรือคลิกเลือกรายการยาในคลังใหญ่ *</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="transfer-drug-search" list="transfer-drug-options" placeholder="พิมพ์หรือเลือกชื่อยา..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required oninput="onTransferDrugSelected()">
+                                <select id="transfer-drug-select-dropdown" onchange="onTransferDropdownSelected(this)" class="border border-slate-300 rounded-lg p-2.5 text-sm bg-slate-50 text-slate-700">
+                                    <option value="">-- เลือกจากรายชื่อ --</option>
+                                </select>
+                            </div>
                             <datalist id="transfer-drug-options"></datalist>
-                            <input type="hidden" id="transfer-drug-id" required>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -314,8 +361,11 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">ผู้ขอเบิก / เหตุผลในการเบิกโอน *</label>
-                            <input type="text" id="transfer-note" placeholder="เช่น เบิกเข้าห้องจ่ายยาประจำสัปดาห์" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">วัตถุประสงค์การเบิก *</label>
+                            <select id="transfer-purpose" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-amber-50 font-semibold text-amber-900" required>
+                                <option value="เบิกยาประจำเดือน">เบิกยาประจำเดือน</option>
+                                <option value="เบิกยาฉุกเฉิน">เบิกยาฉุกเฉิน</option>
+                            </select>
                         </div>
 
                         <div class="pt-2">
@@ -339,7 +389,7 @@
                                     <th class="p-2.5">รายการยา</th>
                                     <th class="p-2.5 text-right">จำนวนเบิกโอน</th>
                                     <th class="p-2.5 text-right">ราคารวม (บาท)</th>
-                                    <th class="p-2.5">ผู้ขอเบิก / หมายเหตุ</th>
+                                    <th class="p-2.5">วัตถุประสงค์ / ผู้ทำรายการ</th>
                                 </tr>
                             </thead>
                             <tbody id="transfer-preview-table" class="divide-y divide-slate-100"></tbody>
@@ -722,6 +772,34 @@
         </main>
     </div>
 
+    <!-- Modal: Low Stock Alert List -->
+    <div id="alert-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 no-print">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-base text-amber-700 flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> รายการยาที่ใกล้หมดสต็อก / คงเหลือต่ำ (<= 500)
+                </h3>
+                <button onclick="closeAlertModal()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="max-h-96 overflow-y-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 border-b text-slate-600">
+                        <tr>
+                            <th class="p-2.5">ชื่อยา / เวชภัณฑ์</th>
+                            <th class="p-2.5">หมวดหมู่</th>
+                            <th class="p-2.5 text-right">คงเหลือ</th>
+                            <th class="p-2.5">วันหมดอายุ / Lot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alert-table-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+            <div class="text-right pt-2 border-t">
+                <button onclick="closeAlertModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-medium">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Add / Edit Drug -->
     <div id="add-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 no-print">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
@@ -826,6 +904,48 @@
             </div>
             <div>
                 <p>ลงชื่อ.............................................ผู้อนุมัติ</p>
+                <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
+                <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Stock Summary (Main/Sub) -->
+    <div id="print-stock-summary-slip" class="hidden print-only print-container print-page portrait-mode">
+        <div class="text-center pb-2 mb-3 border-b-2 border-black">
+            <h1 class="text-lg font-bold" id="print-summary-title">รายงานสรุปมูลค่าคงเหลือยาและเวชภัณฑ์</h1>
+            <p class="text-sm font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
+            <p class="text-xs mt-0.5" id="print-summary-date">-</p>
+        </div>
+        <table class="w-full text-xs">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ลำดับ</th>
+                    <th style="width: 42%;">รายการยา / เวชภัณฑ์</th>
+                    <th style="width: 14%;">หมวดหมู่</th>
+                    <th style="width: 12%; text-align: right;">คงเหลือ</th>
+                    <th style="width: 12%; text-align: right;">ราคา/หน่วย</th>
+                    <th style="width: 12%; text-align: right;">ราคารวม</th>
+                </tr>
+            </thead>
+            <tbody id="print-summary-table-body"></tbody>
+            <tfoot>
+                <tr style="font-weight: bold; background-color: #f8fafc;">
+                    <td colspan="5" style="text-align: right;">มูลค่ารวมทั้งสิ้น:</td>
+                    <td style="text-align: right;" id="print-summary-grand-total">฿0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="signature-section grid grid-cols-2 gap-6 text-center text-xs">
+            <div>
+                <p>ลงชื่อ.............................................ผู้รายงาน</p>
+                <p class="mt-1.5">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
+                <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+            <div>
+                <p>ลงชื่อ.............................................ผู้ตรวจสอบ</p>
                 <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
                 <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
@@ -1261,6 +1381,7 @@
             renderTempLogs();
             renderFridgeLogs();
             renderTransferPreview();
+            renderDashboardPreview();
         }
 
         function handleTempSave(e) {
@@ -1457,7 +1578,7 @@
                             ${log.isNormal ? 'ปกติ' : 'หลุดมาตรฐาน'}
                         </span>
                     </td>
-                    <td class="p-3 text-xs text-slate-600">${log.author} ${log.note ? `(\${log.note})` : ''}</td>
+                    <td class="p-3 text-xs text-slate-600">${log.author} ${log.note ? `(${log.note})` : ''}</td>
                     <td class="p-3 text-center">
                         <button onclick="editFridgeLog(${idx})" class="text-blue-600 hover:text-blue-800 text-xs font-medium p-1" title="แก้ไขรายการ"><i class="fa-solid fa-pen-to-square"></i> แก้ไข</button>
                     </td>
@@ -1465,9 +1586,34 @@
             `).join('');
         }
 
-        // ป้องกันหน้าต่างพิมพ์ค้างบนจอหลักและกระดาษเปล่า
+        // Low stock alert modal controls
+        function openAlertModal() {
+            const lowItems = mainStock.filter(i => i.qty <= 500);
+            const tbody = document.getElementById('alert-table-body');
+            if(lowItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">ไม่มีรายการยาที่เข้าเกณฑ์สต็อกต่ำกว่าหรือเท่ากับ 500</td></tr>`;
+            } else {
+                tbody.innerHTML = lowItems.map(item => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-2.5 font-semibold text-slate-800">${item.name}</td>
+                        <td class="p-2.5"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded">${item.category}</span></td>
+                        <td class="p-2.5 text-right font-bold text-amber-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                        <td class="p-2.5 text-xs text-slate-500">${item.exp || '-'}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
+                    </tr>
+                `).join('');
+            }
+            document.getElementById('alert-modal').classList.remove('hidden');
+            document.getElementById('alert-modal').classList.add('flex');
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+            document.getElementById('alert-modal').classList.remove('flex');
+        }
+
+        // ป้องกันหน้าต่างพิมพ์ค้างบนจอหลักและกระดาษเปล่าหน้าแรก
         function preparePrintSection(targetId) {
-            ['print-monthly-slip', 'print-stock-card-slip', 'print-temp-report-slip', 'print-fridge-temp-report-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-temp-report-slip', 'print-fridge-temp-report-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
@@ -1482,7 +1628,7 @@
         }
 
         window.afterPrint = function() {
-            ['print-monthly-slip', 'print-stock-card-slip', 'print-temp-report-slip', 'print-fridge-temp-report-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-temp-report-slip', 'print-fridge-temp-report-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
@@ -1591,6 +1737,64 @@
             setTimeout(() => { window.print(); }, 250);
         }
 
+        function printMainStockSummary() {
+            document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังใหญ่ (Central Warehouse)";
+            document.getElementById('print-summary-date').innerText = `ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+            
+            let grandTotal = 0;
+            const tbody = document.getElementById('print-summary-table-body');
+            if(mainStock.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่มีข้อมูลในคลังใหญ่</td></tr>`;
+            } else {
+                tbody.innerHTML = mainStock.map((item, idx) => {
+                    const total = item.qty * item.unitCost;
+                    grandTotal += total;
+                    return `
+                        <tr>
+                            <td style="text-align: center;">${idx + 1}</td>
+                            <td>${item.name}</td>
+                            <td>${item.category}</td>
+                            <td style="text-align: right;">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                            <td style="text-align: right;">${parseFloat(item.unitCost).toFixed(2)}</td>
+                            <td style="text-align: right;">${total.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            document.getElementById('print-summary-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            preparePrintSection('print-stock-summary-slip');
+            setTimeout(() => { window.print(); }, 100);
+        }
+
+        function printSubStockSummary() {
+            document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังย่อย (Sub-Stock / OPD)";
+            document.getElementById('print-summary-date').innerText = `ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+            
+            let grandTotal = 0;
+            const tbody = document.getElementById('print-summary-table-body');
+            if(subStock.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่มีข้อมูลในคลังย่อย</td></tr>`;
+            } else {
+                tbody.innerHTML = subStock.map((item, idx) => {
+                    const total = item.qty * item.unitCost;
+                    grandTotal += total;
+                    return `
+                        <tr>
+                            <td style="text-align: center;">${idx + 1}</td>
+                            <td>${item.name}</td>
+                            <td>${item.category}</td>
+                            <td style="text-align: right;">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                            <td style="text-align: right;">${parseFloat(item.unitCost).toFixed(2)}</td>
+                            <td style="text-align: right;">${total.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            document.getElementById('print-summary-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            preparePrintSection('print-stock-summary-slip');
+            setTimeout(() => { window.print(); }, 100);
+        }
+
         function printSingleStockCard() {
             const selectedName = document.getElementById('stock-card-drug-select').value;
             const mainItem = mainStock.find(i => i.name === selectedName) || { qty: 0, unitCost: 0, unit: 'หน่วย', category: '-' };
@@ -1626,6 +1830,36 @@
             setTimeout(() => { window.print(); }, 100);
         }
 
+        function getTransferLogsForMonth(monthVal) {
+            return historyLogs.filter(log => log.type === 'เบิกโอนเข้าคลังย่อย' && (!monthVal || log.date.includes(`${monthVal.split('-')[1]}/${monthVal.split('-')[0]}`)));
+        }
+
+        function renderDashboardPreview() {
+            const selectedMonthVal = document.getElementById('report-month').value;
+            const transferLogs = getTransferLogsForMonth(selectedMonthVal);
+            const tbody = document.getElementById('dash-preview-table');
+            if(!tbody) return;
+
+            if(transferLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">ไม่พบรายการเบิกโอนในรอบเดือนนี้</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = transferLogs.map((log, index) => {
+                const item = mainStock.find(i => i.name === log.name) || subStock.find(i => i.name === log.name) || { unit: 'เม็ด', unitCost: log.totalCost / log.qty };
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-2.5 text-center">${index + 1}</td>
+                        <td class="p-2.5 font-semibold text-slate-800">${log.name}</td>
+                        <td class="p-2.5 text-center">${item.unit || 'เม็ด'}</td>
+                        <td class="p-2.5 text-right font-bold text-amber-600">${parseInt(log.qty).toLocaleString()}</td>
+                        <td class="p-2.5 text-right">฿${parseFloat(item.unitCost || 0).toFixed(2)}</td>
+                        <td class="p-2.5 text-right font-semibold">฿${parseFloat(log.totalCost || 0).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function printMonthlyReport() {
             const selectedMonthVal = document.getElementById('report-month').value;
             let formattedDateText = "-";
@@ -1637,10 +1871,9 @@
 
             document.getElementById('print-month-title').innerText = `ประจำเดือน: ${formattedDateText}`;
 
-            // กรองเฉพาะรายการที่ถูกเบิก/โอนออกคลังใหญ่
-            const transferLogs = historyLogs.filter(log => log.type === 'เบิกโอนเข้าคลังย่อย' && (!selectedMonthVal || log.date.includes(`${selectedMonthVal.split('-')[1]}/${selectedMonthVal.split('-')[0]}`)));
-
+            const transferLogs = getTransferLogsForMonth(selectedMonthVal);
             let grandTotal = 0;
+
             if (transferLogs.length === 0) {
                 document.getElementById('print-table-body').innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่พบรายการเบิกโอนยาในรอบเดือนนี้</td></tr>`;
             } else {
@@ -1682,53 +1915,75 @@
 
         function renderMainStock() {
             const tbody = document.getElementById('main-stock-table');
+            let totalSum = 0;
             if (mainStock.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ยังไม่มีข้อมูลรายการยาในคลังใหญ่</td></tr>`;
+                document.getElementById('main-total-sum-footer').innerText = `฿0.00`;
                 return;
             }
-            tbody.innerHTML = mainStock.map(item => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="p-3 font-semibold text-slate-800">${item.name}</td>
-                    <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category}</span></td>
-                    <td class="p-3 text-right font-bold text-blue-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                    <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
-                    <td class="p-3 text-right font-semibold text-slate-700">฿${(item.qty * item.unitCost).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                    <td class="p-3 text-xs text-slate-500">${item.exp || '-'}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
-                    <td class="p-3 text-center space-x-1">
-                        <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs font-medium p-1" title="ดู Stock Card"><i class="fa-solid fa-id-card"></i></button>
-                        <button onclick="editDrug('main', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs font-medium p-1" title="แก้ไขรายการ"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteDrug('main', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs font-medium p-1" title="ลบรายการ"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = mainStock.map(item => {
+                const rowTotal = item.qty * item.unitCost;
+                totalSum += rowTotal;
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                        <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category}</span></td>
+                        <td class="p-3 text-right font-bold text-blue-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                        <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
+                        <td class="p-3 text-right font-semibold text-slate-700">฿${rowTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td class="p-3 text-xs text-slate-500">${item.exp || '-'}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs font-medium p-1" title="ดู Stock Card"><i class="fa-solid fa-id-card"></i></button>
+                            <button onclick="editDrug('main', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs font-medium p-1" title="แก้ไขรายการ"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteDrug('main', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs font-medium p-1" title="ลบรายการ"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            document.getElementById('main-total-sum-footer').innerText = `฿${totalSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
         }
 
         function renderSubStock() {
             const tbody = document.getElementById('sub-stock-table');
+            let totalSum = 0;
             if (subStock.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">ยังไม่มีข้อมูลรายการยาในคลังย่อย</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ยังไม่มีข้อมูลรายการยาในคลังย่อย</td></tr>`;
+                document.getElementById('sub-total-sum-footer').innerText = `฿0.00`;
                 return;
             }
-            tbody.innerHTML = subStock.map(item => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="p-3 font-semibold text-slate-800">${item.name}</td>
-                    <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category}</span></td>
-                    <td class="p-3 text-right font-bold text-indigo-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                    <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
-                    <td class="p-3 text-right font-semibold text-slate-700">฿${(item.qty * item.unitCost).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                    <td class="p-3 text-center space-x-1">
-                        <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs font-medium p-1" title="ดู Stock Card"><i class="fa-solid fa-id-card"></i></button>
-                        <button onclick="editDrug('sub', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs font-medium p-1" title="แก้ไขรายการ"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteDrug('sub', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs font-medium p-1" title="ลบรายการ"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = subStock.map(item => {
+                const rowTotal = item.qty * item.unitCost;
+                totalSum += rowTotal;
+                const mainRef = mainStock.find(m => m.name === item.name);
+                const lotText = item.lot || (mainRef ? mainRef.lot : '-');
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                        <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category}</span></td>
+                        <td class="p-3 text-right font-bold text-indigo-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                        <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
+                        <td class="p-3 text-right font-semibold text-slate-700">฿${rowTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td class="p-3 text-xs text-slate-500 font-mono">${lotText}</td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs font-medium p-1" title="ดู Stock Card"><i class="fa-solid fa-id-card"></i></button>
+                            <button onclick="editDrug('sub', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs font-medium p-1" title="แก้ไขรายการ"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteDrug('sub', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs font-medium p-1" title="ลบรายการ"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            document.getElementById('sub-total-sum-footer').innerText = `฿${totalSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
         }
 
         function renderTransferOptions() {
             const datalist = document.getElementById('transfer-drug-options');
+            const selectDropdown = document.getElementById('transfer-drug-select-dropdown');
             if(datalist) {
                 datalist.innerHTML = mainStock.map(item => `<option value="${item.name}">`).join('');
+            }
+            if(selectDropdown) {
+                selectDropdown.innerHTML = '<option value="">-- หรือคลิกเลือกจากรายชื่อ --</option>' + 
+                    mainStock.map(item => `<option value="${item.name}">${item.name} (คงเหลือ: ${item.qty} ${item.unit})</option>`).join('');
             }
         }
 
@@ -1736,11 +1991,19 @@
             const searchVal = document.getElementById('transfer-drug-search').value.trim();
             const found = mainStock.find(i => i.name === searchVal);
             if(found) {
-                document.getElementById('transfer-drug-id').value = found.name;
                 document.getElementById('transfer-max').value = `${found.qty} ${found.unit}`;
+                document.getElementById('transfer-drug-select-dropdown').value = found.name;
             } else {
-                document.getElementById('transfer-drug-id').value = '';
                 document.getElementById('transfer-max').value = '-';
+                document.getElementById('transfer-drug-select-dropdown').value = '';
+            }
+        }
+
+        function onTransferDropdownSelected(selectEl) {
+            const val = selectEl.value;
+            if(val) {
+                document.getElementById('transfer-drug-search').value = val;
+                onTransferDrugSelected();
             }
         }
 
@@ -1766,7 +2029,7 @@
             e.preventDefault();
             const drugName = document.getElementById('transfer-drug-search').value.trim();
             const qty = parseInt(document.getElementById('transfer-qty').value);
-            const note = document.getElementById('transfer-note').value.trim();
+            const purpose = document.getElementById('transfer-purpose').value;
             const mainItem = mainStock.find(i => i.name === drugName);
 
             if (!mainItem || qty > mainItem.qty) return alert('จำนวนยาในคลังใหญ่ไม่เพียงพอหรือไม่พบรายการยา');
@@ -1775,13 +2038,14 @@
             let subItem = subStock.find(i => i.name === drugName);
             if (subItem) {
                 subItem.qty = parseInt(subItem.qty) + qty;
+                if(mainItem.lot && !subItem.lot) subItem.lot = mainItem.lot;
             } else {
-                subStock.push({ name: mainItem.name, category: mainItem.category, qty: qty, unit: mainItem.unit, unitCost: mainItem.unitCost });
+                subStock.push({ name: mainItem.name, category: mainItem.category, qty: qty, unit: mainItem.unit, unitCost: mainItem.unitCost, lot: mainItem.lot || '-' });
             }
 
             const now = new Date().toLocaleString('th-TH');
             const author = currentUser ? currentUser.fullname : 'นางกิตติกา วัฒนะ';
-            historyLogs.unshift({ date: now, type: 'เบิกโอนเข้าคลังย่อย', name: mainItem.name, qty: qty, totalCost: qty * mainItem.unitCost, note: `${note} (โดย: ${author})` });
+            historyLogs.unshift({ date: now, type: 'เบิกโอนเข้าคลังย่อย', name: mainItem.name, qty: qty, totalCost: qty * mainItem.unitCost, note: `วัตถุประสงค์: ${purpose} (โดย: ${author})` });
 
             syncToCloud();
             alert('บันทึกการเบิกโอนยาเข้าคลังย่อยสำเร็จ!');
@@ -1853,7 +2117,6 @@
                     subStock = subStock.filter(i => i.name !== drugName);
                 }
 
-                // ตัดประวัติและ log ของยานี้ออกถาวรตามกฎข้อ 4
                 historyLogs = historyLogs.filter(log => log.name !== drugName);
 
                 syncToCloud();
