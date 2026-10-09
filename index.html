@@ -714,8 +714,9 @@
                     <input type="text" id="add-id" placeholder="เช่น MED001" class="w-full border rounded-lg p-2 text-sm" required>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อยา / เวชภัณฑ์ *</label>
-                    <input type="text" id="add-name" placeholder="เช่น Paracetamol 500mg" class="w-full border rounded-lg p-2 text-sm" required>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อยา / เวชภัณฑ์ * (เลือกจากรายการหรือพิมพ์เพิ่มได้)</label>
+                    <input type="text" id="add-name" list="drug-suggestions" placeholder="พิมพ์หรือเลือกชื่อยา..." class="w-full border rounded-lg p-2 text-sm" required>
+                    <datalist id="drug-suggestions"></datalist>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -849,7 +850,7 @@
         </div>
     </div>
 
-    <!-- กราฟอุณหภูมิห้อง (ปรับชื่อผู้รายงานเป็น น.ส.รัชฎาวรรณ จันทร์สุข / นักวิชาการสาธารณสุขปฏิบัติการ) -->
+    <!-- กราฟอุณหภูมิห้อง -->
     <div id="print-temp-report-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-2 mb-2 border-b-2 border-black">
             <h1 class="text-base font-bold">กราฟสรุปการบันทึกอุณหภูมิและความชื้นห้องประจำเดือน (แนวนอน)</h1>
@@ -886,7 +887,7 @@
         </div>
     </div>
 
-    <!-- กราฟอุณหภูมิตู้เย็น (ปรับชื่อผู้รายงานเป็น น.ส.วรรณนิสา จอยสุข / นักวิชาการสาธารณสุข) -->
+    <!-- กราฟอุณหภูมิตู้เย็น -->
     <div id="print-fridge-temp-report-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-2 mb-2 border-b-2 border-black">
             <h1 class="text-base font-bold">กราฟสรุปการบันทึกอุณหภูมิตู้เย็นเก็บยาและวัคซีนประจำเดือน (แนวนอน)</h1>
@@ -926,6 +927,42 @@
     <!-- Application Script -->
     <script>
         const defaultAdmin = { username: 'admin', password: '123', fullname: 'นายสมชาย  ใจดี', position: 'นักวิชาการสาธารณสุข' };
+        
+        // รายชื่อยามาตรฐาน 195 รายการจากไฟล์ Excel
+        const masterDrugList = [
+            "Albendazole 200 mg", "Albendazole suspension 200 mg / 10 ml", "Alcohol 70% 450 ml", "Alcohol 95 %", 
+            "Allopurinol 100 mg (โรค gout)", "Aluminium 250mg + Magnesium 500mg tablet (Alutab)", "Aluminium 220mg/5ml + magnesium120 mg/5ml susp.(Aludox)", 
+            "Amlodipine 5 mg (HT)", "Amoxycillin 500 mg", "Amoxycillin dry syrup 250 mg /5 ml", "Antazolin +tetrahydrozoline eye drop (Hista-oph)", 
+            "Aromatic ammonia spirit (แอโมเนีย)", "Aspirin 81 mg", "Atenolol 50 mg (HT)", "Benzyl benzoate emulsion", "Calamine lotion", 
+            "Calcium carbonate 600 mg", "Cetirizine 10 mg", "Chlorhexidine 4% scrub (hibiscrub)", "Chlorpheniramine maleate 4 mg", 
+            "Chlorpheniramine syrup 2 mg / 5ml", "Clotrimazole cream 1%", "Clotrimazole 100 mg vaginal", "Colchicine 0.6 mg (Gout)", 
+            "Dextromethorphan HBr 15 mg", "Diclofenac sodium 25 mg", "Dicloxacillin sodium 250 mg", "Dicloxacillin dry syrup 62.5 mg/5ml", 
+            "Dimenhydrinate 50 mg", "Diphtheria Tetanus vaccine 0.5 ml (dT) แบบ sd", "Domperidone maleate 10 mg", "Domperidone suspension 5 mg / 5 ml", 
+            "Doxazocin 4 mg (HT, BPH)", "Doxycyclin HCl 100 mg", "Enalapril maleate 5 mg (HT)", "Enalapril maleate 20 mg (HT)", 
+            "Ethinylestradiol 0 .03mg + Levonorgestrel 0.15mg (ยาคมุแบบแผง)", "Erythromycin dry syrup 125 mg/ 5 ml", "Ferrous fumalate 200 mg", 
+            "Ferrous Fumerate suspension 50 mg/5ml", "Folic acid 5 mg", "Furosemide 40 mg (HT)", "Gemfibrozil 300 mg (ยาลดไขมัน)", 
+            "Glipizide tablet 5 mg (DM)", "Glucose 50 % injection 50 ml", "Glyceryl guaicolate 100 mg", "Glyceryl guaiacolate syrup 100mg/5ml", 
+            "Hydralazine 10 mg (HT)", "Hydralazine 50 mg (HT)", "Hydrochlorothiazide 25 mg (HCTZ)", "Hyoscine N-butylbromide 10 mg", 
+            "Ibuprofen 200 mg", "Ibuprofen 400 mg", "Isosorbide dinitrate 5 mg (Sublingual)", "L-Carbocisteine 500 mg", 
+            "L-Carbocisteine syrup 250mg/5ml", "Lactulose syrup 15 ml", "Metformin 500 mg (DM)", "Methyldopa 250 mg (HT)", 
+            "Metoclopramide 10 mg", "Metronidazole 250 mg", "Metronidazole 400 mg", "Multivitamin tablet (MV)", "Naloxone HCl 0.4mg/ml inj.", 
+            "Norfloxacin 400 mg", "Omeprazole 20 mg capsule", "Oral rehydration salt (ORS)", "Paracetamol 325 mg", "Paracetamol 500 mg", 
+            "Paracetamol syrup 120 mg / 5 ml", "Paracetamol drops 60 mg/ 0.6ml", "Phenoxymethyl penicillin 250 mg (Pen V)", 
+            "Phenoxymethyl penicillin dry syrup 125mg/5ml", "Prednisolone 5 mg", "Propranolol 10 mg", "Propranolol 40 mg", 
+            "Pyrazinamide 500 mg (TB)", "Rifampicin 300 mg (TB)", "Salbutamol 2 mg", "Salbutamol 4 mg", "Salbutamol MDI 100 mcg/dose inhaler", 
+            "Silver sulfadiazine cream 25 g", "Simethicone 80 mg", "Sodium chloride 0.9% 100 ml", "Sodium chloride 0.9% 1000 ml", 
+            "Sodium chloride 0.9% 500 ml", "Sodium chloride 0.9% drops 10 ml (NSS)", "Spironolactone 25 mg", "Tetracycline HCl 250 mg capsule", 
+            "Thiamine HCl 100 mg (Vitamin B1)", "Tramadol HCl 50 mg", "Triamcinolone acetonide oral paste 5 g (Kenalog)", 
+            "Vitamin B Complex", "Vitamin C 100 mg", "Warfarin 3 mg", "Water for injection 10 ml", "Zinc sulfate 20 mg elemental", 
+            "ยาชุดสมุนไพรฟ้าทะลายโจร", "ยาดมสมุนไพร", "ยาทากลากเกลื้อน", "ยาสตรีเพ็ญภาค", "ยาหอมอินทจักร", "ยาน้ำแก้ไอสมุนไพร",
+            "ชุดตรวจการตั้งครรภ์ (Urine Pregnancy Test)", "ชุดตรวจน้ำตาลในเลือด (Blood Glucose Test Strip)", "เข็มฉีดยา Syringe 3 ml", 
+            "เข็มฉีดยา Syringe 5 ml", "เข็มฉีดยา Syringe 10 ml", "Disposable Needle 23G", "Disposable Needle 24G", "Cotton ball sterile", 
+            "Cotton gauze sterile 2x2 นิ้ว", "Cotton gauze sterile 3x3 นิ้ว", "Cotton gauze sterile 4x4 นิ้ว", "Elastic bandage 2 นิ้ว", 
+            "Elastic bandage 3 นิ้ว", "Elastic bandage 4 นิ้ว", "Micropore 1 นิ้ว", "Plaster strip (พลาสเตอร์ยา)", "Mask 3 ply (หน้ากากอนามัย)", 
+            "Exam Glove Size S", "Exam Glove Size M", "Exam Glove Size L", "Surgical Glove Size 7", "Surgical Glove Size 7.5", 
+            "Blood pressure monitor (เครื่องวัดความดัน)", "Stethoscope (หูฟังตรวจโรค)", "Digital Thermometer (ปรอทวัดไข้ดิจิตอล)"
+        ];
+
         let usersList = [];
         let currentUser = null;
 
@@ -983,6 +1020,12 @@
             document.getElementById('fridge-date').value = todayISO;
 
             if(cloudUrl) document.getElementById('cloud-url-input').value = cloudUrl;
+
+            // เติมรายการ autocomplete ของยา
+            const datalist = document.getElementById('drug-suggestions');
+            if(datalist) {
+                datalist.innerHTML = masterDrugList.map(drug => `<option value="${drug}">`).join('');
+            }
 
             checkAuthStatus();
         }
