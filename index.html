@@ -136,11 +136,11 @@
 
                     <div id="user-badge" class="flex items-center gap-2 bg-emerald-900/80 px-3 py-1.5 rounded-lg border border-emerald-700 text-xs">
                         <i class="fa-solid fa-user-circle text-amber-300 text-base"></i>
-                        <div>
-                            <div class="font-bold text-white" id="user-display-name">ผู้ใช้งาน</div>
-                            <div class="text-[10px] text-emerald-200" id="user-display-role">ตำแหน่ง</div>
+                        <div class="leading-tight">
+                            <div class="font-bold text-white whitespace-nowrap" id="user-display-name">ผู้ใช้งาน</div>
+                            <div class="text-[9px] text-emerald-200 whitespace-nowrap" id="user-display-role">ตำแหน่ง</div>
                         </div>
-                        <button onclick="handleLogout()" class="ml-2 text-rose-300 hover:text-rose-100 p-1" title="ออกจากระบบ">
+                        <button onclick="handleLogout()" class="ml-1 text-rose-300 hover:text-rose-100 p-1" title="ออกจากระบบ">
                             <i class="fa-solid fa-right-from-bracket"></i>
                         </button>
                     </div>
@@ -154,9 +154,12 @@
                     <span id="cloud-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
                     <span id="cloud-status-text" class="font-medium text-slate-600">สถานะ: ตรวจสอบการเชื่อมต่อ...</span>
                 </div>
-                <button onclick="fetchFromCloud()" class="text-emerald-700 hover:underline flex items-center gap-1">
-                    <i class="fa-solid fa-rotate"></i> โหลดข้อมูลล่าสุดจาก Cloud
-                </button>
+                <div class="flex items-center gap-3">
+                    <span id="active-user-indicator" class="font-bold text-emerald-800 bg-emerald-50 px-2 py-1 rounded border border-emerald-200">User: -</span>
+                    <button onclick="fetchFromCloud()" class="text-emerald-700 hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-rotate"></i> โหลดข้อมูลล่าสุดจาก Cloud
+                    </button>
+                </div>
             </div>
 
             <!-- DASHBOARD -->
@@ -195,7 +198,6 @@
                         <p class="text-xs text-slate-400 mt-2" id="dash-sub-items">0 รายการ</p>
                     </div>
 
-                    <!-- Clickable Alert Card -->
                     <div onclick="openAlertModal()" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-amber-400 transition group">
                         <div class="flex justify-between items-start">
                             <div>
@@ -209,7 +211,7 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h2 class="text-base font-bold text-slate-700 flex items-center gap-2">
                                 <i class="fa-solid fa-print text-emerald-600"></i> พิมพ์ใบเบิกยาสรุปประจำเดือน (คำนวณมูลค่าเงินบาท)
@@ -217,30 +219,10 @@
                             <p class="text-xs text-slate-500">ออกเอกสารใบเบิกยารวมเฉพาะรายการที่ถูกตัดโอนออกจากคลังใหญ่ ส่ง ผอ.รพ.สต.น้ำปาย</p>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <input type="month" id="report-month" onchange="renderDashboardPreview()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+                            <input type="month" id="report-month" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
                             <button onclick="printMonthlyReport()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 whitespace-nowrap shadow-sm">
                                 <i class="fa-solid fa-print"></i> พิมพ์ใบเบิกประจำเดือน
                             </button>
-                        </div>
-                    </div>
-
-                    <!-- Dashboard Monthly Preview Table -->
-                    <div>
-                        <h3 class="font-bold text-xs text-slate-600 mb-2 flex items-center gap-1"><i class="fa-solid fa-table-list text-emerald-600"></i> พรีวิวรายการเบิกโอนประจำเดือนที่จะนำไปพิมพ์</h3>
-                        <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                            <table class="w-full text-left text-xs">
-                                <thead class="bg-slate-50 text-slate-600 border-b">
-                                    <tr>
-                                        <th class="p-2.5">ลำดับ</th>
-                                        <th class="p-2.5">รายการยา</th>
-                                        <th class="p-2.5 text-center">หน่วยนับ</th>
-                                        <th class="p-2.5 text-right">จำนวนเบิก</th>
-                                        <th class="p-2.5 text-right">ราคา/หน่วย</th>
-                                        <th class="p-2.5 text-right">ราคารวม</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dash-preview-table" class="divide-y divide-slate-100"></tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -248,19 +230,30 @@
 
             <!-- MAIN STORE -->
             <div id="tab-main-store" class="tab-content hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
                     <div>
                         <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
                             <i class="fa-solid fa-warehouse text-blue-600"></i> คลังใหญ่ (Central Warehouse - รพ.สต.น้ำปาย)
                         </h2>
                         <p class="text-xs text-slate-500">รับยาและเวชภัณฑ์จาก รพ.แม่ข่าย เข้าเก็บคลังศูนย์กลาง</p>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="flex items-center gap-1 text-xs">
+                            <span>เลือกช่วงเดือน:</span>
+                            <input type="month" id="main-store-month" onchange="renderMainStock()" class="border rounded px-2 py-1 bg-white">
+                        </div>
+                        <select id="main-category-filter" onchange="renderMainStock()" class="border rounded px-2.5 py-1 text-xs bg-white font-medium">
+                            <option value="ALL">-- ทุกหมวดหมู่ --</option>
+                            <option value="ยาทั่วไป">ยาทั่วไป</option>
+                            <option value="ยาอันตราย">ยาอันตราย</option>
+                            <option value="ยาสมุนไพร">ยาสมุนไพร</option>
+                            <option value="เวชภัณฑ์">เวชภัณฑ์</option>
+                        </select>
                         <button onclick="printMainStockSummary()" class="bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-print"></i> พิมพ์สรุปมูลค่าคงเหลือคลังใหญ่
+                            <i class="fa-solid fa-print"></i> พิมพ์สรุปคลังใหญ่
                         </button>
                         <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-plus"></i> บันทึกรับยาเข้าคลังใหญ่
+                            <i class="fa-solid fa-plus"></i> บันทึกรับยา
                         </button>
                     </div>
                 </div>
@@ -279,10 +272,18 @@
                             </tr>
                         </thead>
                         <tbody id="main-stock-table" class="divide-y divide-slate-100"></tbody>
-                        <tfoot class="bg-slate-50 font-bold border-t">
+                        <tfoot class="bg-slate-50 font-bold border-t text-xs">
                             <tr>
-                                <td colspan="4" class="p-3 text-right">มูลค่ารวมทุกรายการในคลังใหญ่:</td>
-                                <td colspan="3" class="p-3 text-blue-600 text-base" id="main-total-sum-footer">฿0.00</td>
+                                <td colspan="4" class="p-2.5 text-right">มูลค่ารวมประเภทยา:</td>
+                                <td colspan="3" class="p-2.5 text-blue-600" id="main-drug-sum-footer">฿0.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="p-2.5 text-right">มูลค่ารวมประเภทเวชภัณฑ์:</td>
+                                <td colspan="3" class="p-2.5 text-indigo-600" id="main-supplies-sum-footer">฿0.00</td>
+                            </tr>
+                            <tr class="bg-slate-100 text-sm">
+                                <td colspan="4" class="p-3 text-right">มูลค่ารวมทั้งสิ้นในคลังใหญ่:</td>
+                                <td colspan="3" class="p-3 text-blue-800 font-bold text-base" id="main-total-sum-footer">฿0.00</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -291,16 +292,22 @@
 
             <!-- SUB STORE -->
             <div id="tab-sub-store" class="tab-content hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex justify-between items-center">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
                     <div>
                         <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
                             <i class="fa-solid fa-store text-indigo-600"></i> คลังย่อย (Sub-Stock / ห้องจ่ายยา OPD)
                         </h2>
                         <p class="text-xs text-slate-500">ยาสมุนไพร/เวชภัณฑ์ที่รับโอนจากคลังใหญ่เข้ามาพร้อมใช้งาน</p>
                     </div>
-                    <button onclick="printSubStockSummary()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
-                        <i class="fa-solid fa-print"></i> พิมพ์สรุปมูลค่าคงเหลือคลังย่อย
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1 text-xs">
+                            <span>เลือกช่วงเดือน:</span>
+                            <input type="month" id="sub-store-month" onchange="renderSubStock()" class="border rounded px-2 py-1 bg-white">
+                        </div>
+                        <button onclick="printSubStockSummary()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-2 rounded-lg text-sm transition flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-print"></i> พิมพ์สรุปคลังย่อย
+                        </button>
+                    </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
@@ -339,14 +346,10 @@
 
                     <form id="transfer-form" onsubmit="handleTransfer(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">พิมพ์ค้นหาหรือคลิกเลือกรายการยาในคลังใหญ่ *</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="transfer-drug-search" list="transfer-drug-options" placeholder="พิมพ์หรือเลือกชื่อยา..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required oninput="onTransferDrugSelected()">
-                                <select id="transfer-drug-select-dropdown" onchange="onTransferDropdownSelected(this)" class="border border-slate-300 rounded-lg p-2.5 text-sm bg-slate-50 text-slate-700">
-                                    <option value="">-- เลือกจากรายชื่อ --</option>
-                                </select>
-                            </div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">พิมพ์ค้นหาหรือเลือกรายการยาในคลังใหญ่ *</label>
+                            <input type="text" id="transfer-drug-search" list="transfer-drug-options" placeholder="พิมพ์ชื่อยาเพื่อค้นหา..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required oninput="onTransferDrugSelected()">
                             <datalist id="transfer-drug-options"></datalist>
+                            <input type="hidden" id="transfer-drug-id" required>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -405,12 +408,17 @@
                         <h2 class="font-bold text-base text-slate-800 flex items-center gap-2">
                             <i class="fa-solid fa-temperature-quarter text-sky-600"></i> ระบบบันทึกอุณหภูมิและความชื้นห้อง
                         </h2>
-                        <p class="text-xs text-slate-500">บันทึก ควบคุม และพิมพ์รายงานกราฟสรุปอุณหภูมิและความชื้นสัมพัทธ์ (แนวนอน A4)</p>
+                        <p class="text-xs text-slate-500">บันทึก ควบคุม และพิมพ์รายงานกราฟสรุปอุณหภูมิและความชื้นสัมพัทธ์</p>
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
                         <input type="month" id="print-room-temp-month" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+                        <select id="print-room-location-select" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white font-medium">
+                            <option value="คลังยาใหญ่">คลังยาใหญ่</option>
+                            <option value="คลังยาย่อย">คลังยาย่อย</option>
+                            <option value="ห้องฉุกเฉิน">ห้องฉุกเฉิน</option>
+                        </select>
                         <button onclick="printRoomTempReport()" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center gap-1.5 shadow-sm whitespace-nowrap">
-                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิห้อง (แนวนอน)
+                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิห้อง
                         </button>
                     </div>
                 </div>
@@ -449,12 +457,10 @@
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">อุณหภูมิ (°C) *</label>
                                     <input type="number" step="0.1" id="temp-val" placeholder="เช่น 23.5" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required>
-                                    <span class="text-[10px] text-slate-400">มาตรฐาน: ไม่เกิน 25°C</span>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">ความชื้น (% RH) *</label>
                                     <input type="number" step="0.1" id="humidity-val" placeholder="เช่น 55.0" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required>
-                                    <span class="text-[10px] text-slate-400">มาตรฐาน: ไม่เกิน 60%</span>
                                 </div>
                             </div>
 
@@ -523,12 +529,16 @@
                         <h2 class="font-bold text-base text-slate-800 flex items-center gap-2">
                             <i class="fa-solid fa-snowflake text-cyan-600"></i> บันทึกอุณหภูมิตู้เย็นยาและวัคซีน
                         </h2>
-                        <p class="text-xs text-slate-500">บันทึก ควบคุม และพิมพ์รายงานกราฟอุณหภูมิตู้เย็นประจำเดือน (แนวนอน A4)</p>
+                        <p class="text-xs text-slate-500">บันทึก ควบคุม และพิมพ์รายงานกราฟอุณหภูมิตู้เย็นประจำเดือน</p>
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
                         <input type="month" id="print-fridge-temp-month" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+                        <select id="print-fridge-type-select" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white font-medium">
+                            <option value="ตู้เย็นเก็บยาเย็น">ตู้เย็นเก็บยาเย็น</option>
+                            <option value="ตู้เย็นเก็บวัคซีน">ตู้เย็นเก็บวัคซีน</option>
+                        </select>
                         <button onclick="printFridgeTempReport()" class="bg-cyan-700 hover:bg-cyan-800 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center gap-1.5 shadow-sm whitespace-nowrap">
-                            <i class="fa-solid fa-print"></i> พิมพ์กราฟตู้เย็น (แนวนอน)
+                            <i class="fa-solid fa-print"></i> พิมพ์กราฟตู้เย็น
                         </button>
                     </div>
                 </div>
@@ -566,13 +576,10 @@
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">อุณหภูมิชั้นบน (°C) [ช่องแช่แข็ง]</label>
                                     <input type="number" step="0.1" id="fridge-top-temp" placeholder="เช่น -18.5" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white" required>
-                                    <span class="text-[10px] text-slate-500">ช่วงมาตรฐาน: -15 °C ถึง -25 °C</span>
                                 </div>
-
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">อุณหภูมิชั้นล่าง (°C) [ช่องแช่เย็น]</label>
                                     <input type="number" step="0.1" id="fridge-bottom-temp" placeholder="เช่น 4.0" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white" required>
-                                    <span class="text-[10px] text-slate-500">ช่วงมาตรฐาน: +2 °C ถึง +8 °C</span>
                                 </div>
                             </div>
 
@@ -668,7 +675,7 @@
                             <p class="text-xs text-slate-500">เลือกรายการเพื่อดูความเคลื่อนไหวการรับเข้า คลังใหญ่ และการเบิก-โอนเข้าคลังย่อย</p>
                         </div>
                         <button onclick="printSingleStockCard()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-print"></i> พิมพ์ Stock Card (A4/PDF)
+                            <i class="fa-solid fa-print"></i> พิมพ์ Stock Card
                         </button>
                     </div>
 
@@ -889,6 +896,14 @@
                 </tr>
             </tfoot>
         </table>
+
+        <!-- Summary boxes before signature as requested -->
+        <div class="my-3 p-2 border border-black rounded text-xs space-y-1 bg-slate-50">
+            <div class="flex justify-between"><span>มูลค่ารับเข้าคลังใหญ่ในรอบเดือนนี้:</span> <strong id="summary-in-val">฿0.00</strong></div>
+            <div class="flex justify-between"><span>มูลค่าเบิก/โอนออกจากคลังใหญ่ในรอบเดือนนี้:</span> <strong id="summary-out-val">฿0.00</strong></div>
+            <div class="flex justify-between"><span>มูลค่าคงเหลือ ณ ปัจจุบันของเดือนนั้นๆ:</span> <strong id="summary-balance-val">฿0.00</strong></div>
+        </div>
+
         <div class="signature-section grid grid-cols-3 gap-2 text-center text-xs">
             <div>
                 <p>ลงชื่อ.............................................ผู้เบิก</p>
@@ -953,6 +968,7 @@
         </div>
     </div>
 
+    <!-- Print Stock Card -->
     <div id="print-stock-card-slip" class="hidden print-only print-container print-page portrait-mode">
         <div class="text-center pb-2 mb-3 border-b-2 border-black">
             <h1 class="text-lg font-bold">บัตรควบคุมเวชภัณฑ์ (Stock Card)</h1>
@@ -1001,11 +1017,11 @@
     <!-- กราฟอุณหภูมิห้อง -->
     <div id="print-temp-report-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-2 mb-2 border-b-2 border-black">
-            <h1 class="text-base font-bold">กราฟสรุปการบันทึกอุณหภูมิและความชื้นห้องประจำเดือน (แนวนอน)</h1>
+            <h1 class="text-base font-bold" id="print-room-temp-heading">กราฟสรุปการบันทึกอุณหภูมิและความชื้นห้องประจำเดือน</h1>
             <p class="text-xs font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
             <p class="text-xs mt-0.5" id="print-room-temp-month-title">ประจำเดือน: -</p>
         </div>
-        <div style="width: 100%; height: 260px; margin-bottom: 15px;">
+        <div style="width: 100%; height: 250px; margin-bottom: 15px;">
             <canvas id="roomTempChartCanvas"></canvas>
         </div>
         <table class="w-full text-xs">
@@ -1038,11 +1054,11 @@
     <!-- กราฟอุณหภูมิตู้เย็น -->
     <div id="print-fridge-temp-report-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-2 mb-2 border-b-2 border-black">
-            <h1 class="text-base font-bold">กราฟสรุปการบันทึกอุณหภูมิตู้เย็นเก็บยาและวัคซีนประจำเดือน (แนวนอน)</h1>
+            <h1 class="text-base font-bold" id="print-fridge-temp-heading">กราฟสรุปการบันทึกอุณหภูมิตู้เย็นเก็บยาและวัคซีนประจำเดือน</h1>
             <p class="text-xs font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
             <p class="text-xs mt-0.5" id="print-fridge-temp-month-title">ประจำเดือน: -</p>
         </div>
-        <div style="width: 100%; height: 260px; margin-bottom: 15px;">
+        <div style="width: 100%; height: 250px; margin-bottom: 15px;">
             <canvas id="fridgeTempChartCanvas"></canvas>
         </div>
         <table class="w-full text-xs">
@@ -1161,6 +1177,8 @@
             const monthVal = todayISO.substring(0, 7);
             
             document.getElementById('report-month').value = monthVal;
+            document.getElementById('main-store-month').value = monthVal;
+            document.getElementById('sub-store-month').value = monthVal;
             document.getElementById('print-room-temp-month').value = monthVal;
             document.getElementById('print-fridge-temp-month').value = monthVal;
             document.getElementById('temp-date').value = todayISO;
@@ -1185,6 +1203,7 @@
                 appContent.classList.remove('hidden');
                 document.getElementById('user-display-name').innerText = currentUser.fullname;
                 document.getElementById('user-display-role').innerText = currentUser.position;
+                document.getElementById('active-user-indicator').innerText = `User: ${currentUser.fullname} (${currentUser.position})`;
                 fetchFromCloud(); 
             } else {
                 authModal.classList.remove('hidden');
@@ -1381,7 +1400,6 @@
             renderTempLogs();
             renderFridgeLogs();
             renderTransferPreview();
-            renderDashboardPreview();
         }
 
         function handleTempSave(e) {
@@ -1586,7 +1604,6 @@
             `).join('');
         }
 
-        // Low stock alert modal controls
         function openAlertModal() {
             const lowItems = mainStock.filter(i => i.qty <= 500);
             const tbody = document.getElementById('alert-table-body');
@@ -1611,7 +1628,6 @@
             document.getElementById('alert-modal').classList.remove('flex');
         }
 
-        // ป้องกันหน้าต่างพิมพ์ค้างบนจอหลักและกระดาษเปล่าหน้าแรก
         function preparePrintSection(targetId) {
             ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-temp-report-slip', 'print-fridge-temp-report-slip'].forEach(id => {
                 const el = document.getElementById(id);
@@ -1649,17 +1665,19 @@
 
         function printRoomTempReport() {
             const selectedMonth = document.getElementById('print-room-temp-month').value;
+            const selectedLoc = document.getElementById('print-room-location-select').value;
             if (!selectedMonth) return alert('กรุณาเลือกเดือนที่ต้องการสั่งพิมพ์');
 
             const parts = selectedMonth.split('-');
             const monthTitleText = `${thaiMonths[parseInt(parts[1]) - 1]} พ.ศ. ${parseInt(parts[0]) + 543}`;
+            document.getElementById('print-room-temp-heading').innerText = `กราฟสรุปการบันทึกอุณหภูมิและความชื้นห้องประจำเดือน - ${selectedLoc}`;
             document.getElementById('print-room-temp-month-title').innerText = `ประจำเดือน: ${monthTitleText}`;
 
-            const filteredLogs = tempLogs.filter(log => log.isoDate && log.isoDate.startsWith(selectedMonth)).reverse();
+            const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && log.isoDate && log.isoDate.startsWith(selectedMonth)).reverse();
             const tbody = document.getElementById('print-room-temp-table-body');
             
             if (filteredLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่พบประวัติการบันทึกอุณหภูมิห้องประจำเดือน ${monthTitleText}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่พบประวัติการบันทึกอุณหภูมิห้อง [${selectedLoc}] ประจำเดือน ${monthTitleText}</td></tr>`;
             } else {
                 tbody.innerHTML = filteredLogs.map(log => `
                     <tr>
@@ -1694,17 +1712,19 @@
 
         function printFridgeTempReport() {
             const selectedMonth = document.getElementById('print-fridge-temp-month').value;
+            const selectedType = document.getElementById('print-fridge-type-select').value;
             if (!selectedMonth) return alert('กรุณาเลือกเดือนที่ต้องการสั่งพิมพ์');
 
             const parts = selectedMonth.split('-');
             const monthTitleText = `${thaiMonths[parseInt(parts[1]) - 1]} พ.ศ. ${parseInt(parts[0]) + 543}`;
+            document.getElementById('print-fridge-temp-heading').innerText = `กราฟสรุปการบันทึกอุณหภูมิตู้เย็นเก็บยาและวัคซีน - ${selectedType}`;
             document.getElementById('print-fridge-temp-month-title').innerText = `ประจำเดือน: ${monthTitleText}`;
 
-            const filteredLogs = fridgeLogs.filter(log => log.isoDate && log.isoDate.startsWith(selectedMonth)).reverse();
+            const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && log.isoDate && log.isoDate.startsWith(selectedMonth)).reverse();
             const tbody = document.getElementById('print-fridge-temp-table-body');
             
             if (filteredLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่พบประวัติการบันทึกอุณหภูมิตู้เย็นประจำเดือน ${monthTitleText}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center">ไม่พบประวัติการบันทึกอุณหภูมิตู้เย็น [${selectedType}] ประจำเดือน ${monthTitleText}</td></tr>`;
             } else {
                 tbody.innerHTML = filteredLogs.map(log => `
                     <tr>
@@ -1738,8 +1758,9 @@
         }
 
         function printMainStockSummary() {
+            const selectedMonth = document.getElementById('main-store-month').value;
             document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังใหญ่ (Central Warehouse)";
-            document.getElementById('print-summary-date').innerText = `ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${selectedMonth ? selectedMonth : 'ปัจจุบัน'} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
             
             let grandTotal = 0;
             const tbody = document.getElementById('print-summary-table-body');
@@ -1767,8 +1788,9 @@
         }
 
         function printSubStockSummary() {
+            const selectedMonth = document.getElementById('sub-store-month').value;
             document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังย่อย (Sub-Stock / OPD)";
-            document.getElementById('print-summary-date').innerText = `ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${selectedMonth ? selectedMonth : 'ปัจจุบัน'} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
             
             let grandTotal = 0;
             const tbody = document.getElementById('print-summary-table-body');
@@ -1797,10 +1819,12 @@
 
         function printSingleStockCard() {
             const selectedName = document.getElementById('stock-card-drug-select').value;
+            if(!selectedName) return alert('กรุณาเลือกรายการยาที่ต้องการพิมพ์ Stock Card');
+
             const mainItem = mainStock.find(i => i.name === selectedName) || { qty: 0, unitCost: 0, unit: 'หน่วย', category: '-' };
             const subItem = subStock.find(i => i.name === selectedName) || { qty: 0 };
 
-            document.getElementById('print-card-name').innerText = selectedName || '-';
+            document.getElementById('print-card-name').innerText = selectedName;
             document.getElementById('print-card-cat').innerText = mainItem.category || '-';
             document.getElementById('print-card-unit').innerText = mainItem.unit || '-';
             document.getElementById('print-card-cost').innerText = parseFloat(mainItem.unitCost || 0).toFixed(2);
@@ -1832,32 +1856,6 @@
 
         function getTransferLogsForMonth(monthVal) {
             return historyLogs.filter(log => log.type === 'เบิกโอนเข้าคลังย่อย' && (!monthVal || log.date.includes(`${monthVal.split('-')[1]}/${monthVal.split('-')[0]}`)));
-        }
-
-        function renderDashboardPreview() {
-            const selectedMonthVal = document.getElementById('report-month').value;
-            const transferLogs = getTransferLogsForMonth(selectedMonthVal);
-            const tbody = document.getElementById('dash-preview-table');
-            if(!tbody) return;
-
-            if(transferLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">ไม่พบรายการเบิกโอนในรอบเดือนนี้</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = transferLogs.map((log, index) => {
-                const item = mainStock.find(i => i.name === log.name) || subStock.find(i => i.name === log.name) || { unit: 'เม็ด', unitCost: log.totalCost / log.qty };
-                return `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-2.5 text-center">${index + 1}</td>
-                        <td class="p-2.5 font-semibold text-slate-800">${log.name}</td>
-                        <td class="p-2.5 text-center">${item.unit || 'เม็ด'}</td>
-                        <td class="p-2.5 text-right font-bold text-amber-600">${parseInt(log.qty).toLocaleString()}</td>
-                        <td class="p-2.5 text-right">฿${parseFloat(item.unitCost || 0).toFixed(2)}</td>
-                        <td class="p-2.5 text-right font-semibold">฿${parseFloat(log.totalCost || 0).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                    </tr>
-                `;
-            }).join('');
         }
 
         function printMonthlyReport() {
@@ -1894,6 +1892,20 @@
             }
 
             document.getElementById('print-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+
+            // คำนวณมูลค่ารับเข้า / เบิกออก / คงเหลือประจำเดือน
+            let sumIn = 0;
+            let sumOut = grandTotal;
+            historyLogs.forEach(l => {
+                if(l.type === 'รับเข้าคลังใหญ่' && (!selectedMonthVal || l.date.includes(`${selectedMonthVal.split('-')[1]}/${selectedMonthVal.split('-')[0]}`))) {
+                    sumIn += parseFloat(l.totalCost || 0);
+                }
+            });
+            let currentBalanceVal = mainStock.reduce((acc, i) => acc + (i.qty * i.unitCost), 0) + subStock.reduce((acc, i) => acc + (i.qty * i.unitCost), 0);
+
+            document.getElementById('summary-in-val').innerText = `฿${sumIn.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('summary-out-val').innerText = `฿${sumOut.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('summary-balance-val').innerText = `฿${currentBalanceVal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
             
             preparePrintSection('print-monthly-slip');
             setTimeout(() => { window.print(); }, 100);
@@ -1915,15 +1927,32 @@
 
         function renderMainStock() {
             const tbody = document.getElementById('main-stock-table');
-            let totalSum = 0;
-            if (mainStock.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ยังไม่มีข้อมูลรายการยาในคลังใหญ่</td></tr>`;
+            const selectedCat = document.getElementById('main-category-filter').value;
+            const selectedMonth = document.getElementById('main-store-month').value;
+
+            let filtered = mainStock;
+            if(selectedCat !== 'ALL') {
+                filtered = filtered.filter(i => i.category === selectedCat);
+            }
+
+            let drugSum = 0;
+            let suppliesSum = 0;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ไม่พบข้อมูลรายการยาในคลังใหญ่ตามเงื่อนไขที่เลือก</td></tr>`;
+                document.getElementById('main-drug-sum-footer').innerText = `฿0.00`;
+                document.getElementById('main-supplies-sum-footer').innerText = `฿0.00`;
                 document.getElementById('main-total-sum-footer').innerText = `฿0.00`;
                 return;
             }
-            tbody.innerHTML = mainStock.map(item => {
+
+            tbody.innerHTML = filtered.map(item => {
                 const rowTotal = item.qty * item.unitCost;
-                totalSum += rowTotal;
+                if(item.category === 'เวชภัณฑ์') {
+                    suppliesSum += rowTotal;
+                } else {
+                    drugSum += rowTotal;
+                }
                 return `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3 font-semibold text-slate-800">${item.name}</td>
@@ -1940,12 +1969,17 @@
                     </tr>
                 `;
             }).join('');
-            document.getElementById('main-total-sum-footer').innerText = `฿${totalSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+
+            document.getElementById('main-drug-sum-footer').innerText = `฿${drugSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('main-supplies-sum-footer').innerText = `฿${suppliesSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('main-total-sum-footer').innerText = `฿${(drugSum + suppliesSum).toLocaleString('th-TH', {minimumFractionDigits:2})}`;
         }
 
         function renderSubStock() {
             const tbody = document.getElementById('sub-stock-table');
+            const selectedMonth = document.getElementById('sub-store-month').value;
             let totalSum = 0;
+
             if (subStock.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ยังไม่มีข้อมูลรายการยาในคลังย่อย</td></tr>`;
                 document.getElementById('sub-total-sum-footer').innerText = `฿0.00`;
@@ -1977,13 +2011,8 @@
 
         function renderTransferOptions() {
             const datalist = document.getElementById('transfer-drug-options');
-            const selectDropdown = document.getElementById('transfer-drug-select-dropdown');
             if(datalist) {
                 datalist.innerHTML = mainStock.map(item => `<option value="${item.name}">`).join('');
-            }
-            if(selectDropdown) {
-                selectDropdown.innerHTML = '<option value="">-- หรือคลิกเลือกจากรายชื่อ --</option>' + 
-                    mainStock.map(item => `<option value="${item.name}">${item.name} (คงเหลือ: ${item.qty} ${item.unit})</option>`).join('');
             }
         }
 
@@ -1992,18 +2021,8 @@
             const found = mainStock.find(i => i.name === searchVal);
             if(found) {
                 document.getElementById('transfer-max').value = `${found.qty} ${found.unit}`;
-                document.getElementById('transfer-drug-select-dropdown').value = found.name;
             } else {
                 document.getElementById('transfer-max').value = '-';
-                document.getElementById('transfer-drug-select-dropdown').value = '';
-            }
-        }
-
-        function onTransferDropdownSelected(selectEl) {
-            const val = selectEl.value;
-            if(val) {
-                document.getElementById('transfer-drug-search').value = val;
-                onTransferDrugSelected();
             }
         }
 
