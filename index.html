@@ -20,6 +20,7 @@
             th, td { border: 1px solid #000000 !important; padding: 4px 6px !important; word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 9pt !important; }
             th { background-color: #f1f5f9 !important; font-weight: bold !important; text-align: center !important; }
             .signature-section { page-break-inside: avoid !important; margin-top: 20px !important; }
+            .print-chart-box { width: 100% !important; height: 450px !important; page-break-inside: avoid !important; margin: 0 auto !important; }
         }
         @page portrait-setting { size: A4 portrait; margin: 12mm 10mm 12mm 10mm; }
         @page landscape-setting { size: A4 landscape; margin: 8mm 10mm 8mm 10mm; }
@@ -40,7 +41,6 @@
                 <p class="text-xs text-emerald-200 mt-1">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
             </div>
 
-            <!-- Login Form -->
             <div id="login-box" class="p-6 space-y-4">
                 <h3 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-right-to-bracket text-emerald-600"></i> เข้าสู่ระบบเจ้าหน้าที่
@@ -73,7 +73,6 @@
                 </div>
             </div>
 
-            <!-- Register Form -->
             <div id="register-box" class="p-6 space-y-4 hidden">
                 <h3 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-user-plus text-emerald-600"></i> ลงทะเบียนเจ้าหน้าที่ใหม่
@@ -108,7 +107,6 @@
         </div>
     </div>
 
-    <!-- Modal: Forgot Password -->
     <div id="forgot-password-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 no-print">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4">
             <h3 class="font-bold text-base text-amber-700 border-b pb-2 flex items-center gap-2">
@@ -443,7 +441,6 @@
                     </form>
                 </div>
 
-                <!-- Preview Table of Recent Transfer Operations -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="font-bold text-sm text-slate-800 border-b pb-2 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-amber-600"></i> พรีวิวประวัติรายการเบิก-โอนล่าสุด
@@ -481,15 +478,19 @@
                             <option value="คลังยาย่อย">คลังยาย่อย</option>
                             <option value="ห้องฉุกเฉิน">ห้องฉุกเฉิน</option>
                         </select>
+                        <button onclick="printRoomTempChart()" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิห้อง
+                        </button>
                     </div>
                 </div>
 
-                <!-- กราฟเส้นแสดงอุณหภูมิห้อง (ตามสั่งไม่ต้องแสดงตารางปริ้น) -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
-                    <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-sky-600"></i> กราฟเส้นแสดงแนวโน้มอุณหภูมิและความชื้นห้อง (พร้อมระบุตัวเลขบนจุดพอยต์)
-                    </h3>
-                    <div style="width: 100%; height: 320px;">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-sky-600"></i> กราฟเส้นแสดงแนวโน้มอุณหภูมิและความชื้นห้อง (พร้อมระบุตัวเลขบนจุดพอยต์)
+                        </h3>
+                    </div>
+                    <div style="width: 100%; height: 320px;" id="room-chart-container-box">
                         <canvas id="roomTempChartCanvas"></canvas>
                     </div>
                 </div>
@@ -615,15 +616,19 @@
                             <option value="ตู้เย็นเก็บยาเย็น">ตู้เย็นเก็บยาเย็น</option>
                             <option value="ตู้เย็นเก็บวัคซีน">ตู้เย็นเก็บวัคซีน</option>
                         </select>
+                        <button onclick="printFridgeTempChart()" class="bg-cyan-700 hover:bg-cyan-800 text-white px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิตู้เย็น
+                        </button>
                     </div>
                 </div>
 
-                <!-- กราฟเส้นแสดงอุณหภูมิตู้เย็น (ตามสั่งไม่ต้องแสดงตารางปริ้น) -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
-                    <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-cyan-600"></i> กราฟเส้นแสดงอุณหภูมิตู้เย็น (พร้อมระบุตัวเลขบนจุดพอยต์ เช่น -16°C / 4°C)
-                    </h3>
-                    <div style="width: 100%; height: 320px;">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-cyan-600"></i> กราฟเส้นแสดงอุณหภูมิตู้เย็น (พร้อมระบุตัวเลขบนจุดพอยต์ เช่น -16°C / 4°C)
+                        </h3>
+                    </div>
+                    <div style="width: 100%; height: 320px;" id="fridge-chart-container-box">
                         <canvas id="fridgeTempChartCanvas"></canvas>
                     </div>
                 </div>
@@ -999,7 +1004,6 @@
             </tfoot>
         </table>
 
-        <!-- Summary boxes before signature with carryover, receive, dispense, and remaining balances per category -->
         <div class="my-3 p-3 border border-black rounded text-xs space-y-2 bg-slate-50">
             <h4 class="font-bold text-center border-b pb-1 border-black">สรุปบัญชีมูลค่ายอดยกมา - ยอดรับ - ยอดเบิก - ยอดคงเหลือยกไป (แยกตามหมวดหมู่)</h4>
             <table class="w-full text-xs border-collapse">
@@ -1126,36 +1130,85 @@
         </div>
     </div>
 
-    <!-- Application Script -->
+    <!-- Print Chart Slips for Room & Fridge Temp -->
+    <div id="print-room-chart-slip" class="hidden print-only print-container print-page landscape-mode">
+        <div class="text-center pb-2 mb-3 border-b-2 border-black">
+            <h1 class="text-lg font-bold">รายงานกราฟแสดงอุณหภูมิและความชื้นห้อง</h1>
+            <p class="text-sm font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
+            <p class="text-xs mt-0.5" id="print-room-chart-info">-</p>
+        </div>
+        <div class="print-chart-box">
+            <canvas id="printRoomChartCanvas"></canvas>
+        </div>
+        <div class="signature-section grid grid-cols-2 gap-6 text-center text-xs mt-6">
+            <div>
+                <p>ลงชื่อ.............................................ผู้บันทึก/ผู้รายงาน</p>
+                <p class="mt-1.5">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
+                <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+            <div>
+                <p>ลงชื่อ.............................................ผู้ตรวจสอบ</p>
+                <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
+                <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-fridge-chart-slip" class="hidden print-only print-container print-page landscape-mode">
+        <div class="text-center pb-2 mb-3 border-b-2 border-black">
+            <h1 class="text-lg font-bold">รายงานกราฟแสดงอุณหภูมิตู้เย็นยาและวัคซีน</h1>
+            <p class="text-sm font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
+            <p class="text-xs mt-0.5" id="print-fridge-chart-info">-</p>
+        </div>
+        <div class="print-chart-box">
+            <canvas id="printFridgeChartCanvas"></canvas>
+        </div>
+        <div class="signature-section grid grid-cols-2 gap-6 text-center text-xs mt-6">
+            <div>
+                <p>ลงชื่อ.............................................ผู้บันทึก/ผู้รายงาน</p>
+                <p class="mt-1.5">(น.ส.วรรณนิสา จอยสุข)</p>
+                <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุข</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+            <div>
+                <p>ลงชื่อ.............................................ผู้ตรวจสอบ</p>
+                <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
+                <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
+                <p class="mt-1.5">วันที่ .........../............/...........</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         const defaultAdmin = { username: 'admin', password: '123', fullname: 'นายสมชาย ใจดี', position: 'นักวิชาการสาธารณสุข' };
         
         const masterDrugList = [
             "Albendazole 200 mg", "Albendazole suspension 200 mg / 10 ml", "Alcohol 70% 450 ml", "Alcohol 95 %", 
-            "Allopurinol 100 mg (โรค gout)", "Aluminium 250mg + Magnesium 500mg tablet (Alutab)", "Aluminium 220mg/5ml + magnesium120 mg/5ml susp.(Aludox)", 
-            "Amlodipine 5 mg (HT)", "Amoxycillin 500 mg", "Amoxycillin dry syrup 250 mg /5 ml", "Antazolin +tetrahydrozoline eye drop (Hista-oph)", 
-            "Aromatic ammonia spirit (แอโมเนีย)", "Aspirin 81 mg", "Atenolol 50 mg (HT)", "Benzyl benzoate emulsion", "Calamine lotion", 
+            "Allopurinol 100 mg ", "Aluminium 250mg + Magnesium 500mg tablet (Alutab)", "Aluminium 220mg/5ml + magnesium120 mg/5ml susp.(Aludox)", 
+            "Amlodipine 5 mg ", "Amoxycillin 500 mg", "Amoxycillin dry syrup 250 mg /5 ml", "Antazolin +tetrahydrozoline eye drop (Hista-oph)", 
+            "Aromatic ammonia spirit (แอมโมเนีย)", "Aspirin 81 mg", "Atenolol 50 mg", "Benzyl benzoate emulsion", "Calamine lotion", 
             "Calcium carbonate 600 mg", "Cetirizine 10 mg", "Chlorhexidine 4% scrub (hibiscrub)", "Chlorpheniramine maleate 4 mg", 
-            "Chlorpheniramine syrup 2 mg / 5ml", "Clotrimazole cream 1%", "Clotrimazole 100 mg vaginal", "Colchicine 0.6 mg (Gout)", 
-            "Dextromethorphan HBr 15 mg", "Diclofenac sodium 25 mg", "Dicloxacillin sodium 250 mg", "Dicloxacillin dry syrup 62.5 mg/5ml", 
+            "Chlorpheniramine syrup 2 mg / 5ml", "Clotrimazole cream 1%", "Clotrimazole 100 mg vaginal", "Colchicine 0.6 mg ", 
+            "Dextromethorphan 15 mg", "Diclofenac sodium 25 mg", "Dicloxacillin sodium 250 mg", "Dicloxacillin dry syrup 62.5 mg/5ml", 
             "Dimenhydrinate 50 mg", "Diphtheria Tetanus vaccine 0.5 ml (dT) แบบ sd", "Domperidone maleate 10 mg", "Domperidone suspension 5 mg / 5 ml", 
-            "Doxazocin 4 mg (HT, BPH)", "Doxycyclin HCl 100 mg", "Enalapril maleate 5 mg (HT)", "Enalapril maleate 20 mg (HT)", 
-            "Ethinylestradiol 0 .03mg + Levonorgestrel 0.15mg (ยาคมุแบบแผง)", "Erythromycin dry syrup 125 mg/ 5 ml", "Ferrous fumalate 200 mg", 
-            "Ferrous Fumerate suspension 50 mg/5ml", "Folic acid 5 mg", "Furosemide 40 mg (HT)", "Gemfibrozil 300 mg (ยาลดไขมัน)", 
-            "Glipizide tablet 5 mg (DM)", "Glucose 50 % injection 50 ml", "Glyceryl guaicolate 100 mg", "Glyceryl guaiacolate syrup 100mg/5ml", 
-            "Hydralazine 10 mg (HT)", "Hydralazine 50 mg (HT)", "Hydrochlorothiazide 25 mg (HCTZ)", "Hyoscine N-butylbromide 10 mg", 
+            "Doxazocin 4 mg", "Doxycyclin HCl 100 mg", "Enalapril maleate 5 mg", "Enalapril maleate 20 mg", 
+            "Ethinylestradiol 0 .03mg + Levonorgestrel 0.15mg (ยาคุมแบบแผง)", "Erythromycin dry syrup 125 mg/ 5 ml", "Ferrous fumalate 200 mg", 
+            "Ferrous Fumerate suspension 50 mg/5ml", "Folic acid 5 mg", "Furosemide 40 mg (HT)", "Gemfibrozil 300 mg", 
+            "Glipizide tablet 5 mg", "Glucose 50 % injection 50 ml", "Glyceryl guaicolate 100 mg", "Glyceryl guaiacolate syrup 100mg/5ml", 
+            "Hydralazine 10 mg", "Hydralazine 50 mg", "Hydrochlorothiazide 25 mg (HCTZ)", "Hyoscine N-butylbromide 10 mg", 
             "Ibuprofen 200 mg", "Ibuprofen 400 mg", "Isosorbide dinitrate 5 mg (Sublingual)", "L-Carbocisteine 500 mg", 
-            "L-Carbocisteine syrup 250mg/5ml", "Lactulose syrup 15 ml", "Metformin 500 mg (DM)", "Methyldopa 250 mg (HT)", 
-            "Metoclopramide 10 mg", "Metronidazole 250 mg", "Metronidazole 400 mg", "Multivitamin tablet (MV)", "Naloxone HCl 0.4mg/ml inj.", 
+            "L-Carbocisteine syrup 250mg/5ml", "Lactulose syrup 15 ml", "Metformin 500 mg", "Methyldopa 250 mg", 
+            "Metoclopramide 10 mg", "Metronidazole 400 mg", "Multivitamin tablet (MTV)", 
             "Norfloxacin 400 mg", "Omeprazole 20 mg capsule", "Oral rehydration salt (ORS)", "Paracetamol 325 mg", "Paracetamol 500 mg", 
-            "Paracetamol syrup 120 mg / 5 ml", "Paracetamol drops 60 mg/ 0.6ml", "Phenoxymethyl penicillin 250 mg (Pen V)", 
-            "Phenoxymethyl penicillin dry syrup 125mg/5ml", "Prednisolone 5 mg", "Propranolol 10 mg", "Propranolol 40 mg", 
-            "Pyrazinamide 500 mg (TB)", "Rifampicin 300 mg (TB)", "Salbutamol 2 mg", "Salbutamol 4 mg", "Salbutamol MDI 100 mcg/dose inhaler", 
+            "Paracetamol syrup 120 mg / 5 ml", "Penicillin 250 mg (Pen V)", 
+            "Phenoxymethyl penicillin dry syrup 125mg/5ml", "Prednisolone 5 mg", "Propranolol 10 mg", "Propranolol 40 mg",  
             "Silver sulfadiazine cream 25 g", "Simethicone 80 mg", "Sodium chloride 0.9% 100 ml", "Sodium chloride 0.9% 1000 ml", 
             "Sodium chloride 0.9% 500 ml", "Sodium chloride 0.9% drops 10 ml (NSS)", "Spironolactone 25 mg", "Tetracycline HCl 250 mg capsule", 
-            "Thiamine HCl 100 mg (Vitamin B1)", "Tramadol HCl 50 mg", "Triamcinolone acetonide oral paste 5 g (Kenalog)", 
+            "Thiamine HCl 100 mg (Vitamin B1)", "Tramadol HCl 50 mg", "Triamcinolone acetonide oral paste 5 g (Kanolone)", 
             "Vitamin B Complex", "Vitamin C 100 mg", "Warfarin 3 mg", "Water for injection 10 ml", "Zinc sulfate 20 mg elemental", 
-            "ยาชุดสมุนไพรฟ้าทะลายโจร", "ยาดมสมุนไพร", "ยาทากลากเกลื้อน", "ยาสตรีเพ็ญภาค", "ยาหอมอินทจักร", "ยาน้ำแก้ไอสมุนไพร",
+            "ยาฟ้าทะลายโจร", "ยาขมิ้นชัน", "ยาเพชรสังฆาต", "ยามะขามแขก", "ยาอมมะแว้ง", "ยาน้ำแก้ไอมะขามป้อม",
             "ชุดตรวจการตั้งครรภ์ (Urine Pregnancy Test)", "ชุดตรวจน้ำตาลในเลือด (Blood Glucose Test Strip)", "เข็มฉีดยา Syringe 3 ml", 
             "เข็มฉีดยา Syringe 5 ml", "เข็มฉีดยา Syringe 10 ml", "Disposable Needle 23G", "Disposable Needle 24G", "Cotton ball sterile", 
             "Cotton gauze sterile 2x2 นิ้ว", "Cotton gauze sterile 3x3 นิ้ว", "Cotton gauze sterile 4x4 นิ้ว", "Elastic bandage 2 นิ้ว", 
@@ -1175,7 +1228,6 @@
 
         let cloudUrl = localStorage.getItem('nam_pai_cloud_url') || '';
 
-        // Pagination states
         let tempCurrentPage = 1;
         let fridgeCurrentPage = 1;
         let historyCurrentPage = 1;
@@ -1183,6 +1235,8 @@
 
         let roomChartInstance = null;
         let fridgeChartInstance = null;
+        let printRoomChartInstance = null;
+        let printFridgeChartInstance = null;
 
         const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
 
@@ -1590,7 +1644,6 @@
             const selectedMonth = document.getElementById('filter-room-temp-month').value;
             const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
 
-            // Render Chart for Room Temp with Data Labels on Points
             const chartLogs = [...filteredLogs].reverse();
             const ctx = document.getElementById('roomTempChartCanvas').getContext('2d');
             if (roomChartInstance) roomChartInstance.destroy();
@@ -1624,7 +1677,6 @@
                 }
             });
 
-            // Pagination table
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
             if (tempCurrentPage > totalPages) tempCurrentPage = totalPages;
             const startIdx = (tempCurrentPage - 1) * rowsPerPage;
@@ -1654,6 +1706,43 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        function printRoomTempChart() {
+            const selectedLoc = document.getElementById('filter-room-location').value;
+            const selectedMonth = document.getElementById('filter-room-temp-month').value;
+            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ทั้งหมด';
+
+            document.getElementById('print-room-chart-info').innerText = `พื้นที่: ${selectedLoc} | รอบเดือน: ${formattedMonthText} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+
+            preparePrintSection('print-room-chart-slip');
+
+            const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
+            const chartLogs = [...filteredLogs].reverse();
+
+            const printCtx = document.getElementById('printRoomChartCanvas').getContext('2d');
+            if (printRoomChartInstance) printRoomChartInstance.destroy();
+
+            printRoomChartInstance = new Chart(printCtx, {
+                type: 'line',
+                data: {
+                    labels: chartLogs.map(l => `${l.isoDate || ''} (${l.session || ''})`),
+                    datasets: [
+                        { label: 'อุณหภูมิ (°C)', data: chartLogs.map(l => l.temp), borderColor: '#0284c7', backgroundColor: '#0284c7', borderWidth: 2, tension: 0.2 },
+                        { label: 'ความชื้น (%RH)', data: chartLogs.map(l => l.humidity), borderColor: '#059669', backgroundColor: '#059669', borderWidth: 2, borderDash: [4, 4], tension: 0.2 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { enabled: true }
+                    }
+                }
+            });
+
+            setTimeout(() => { window.print(); }, 200);
         }
 
         function handleFridgeTempSave(e) {
@@ -1752,7 +1841,6 @@
             const selectedMonth = document.getElementById('filter-fridge-temp-month').value;
             const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
 
-            // Render Chart for Fridge Temp with Data Labels
             const chartLogs = [...filteredLogs].reverse();
             const ctx = document.getElementById('fridgeTempChartCanvas').getContext('2d');
             if (fridgeChartInstance) fridgeChartInstance.destroy();
@@ -1786,7 +1874,6 @@
                 }
             });
 
-            // Pagination table
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
             if (fridgeCurrentPage > totalPages) fridgeCurrentPage = totalPages;
             const startIdx = (fridgeCurrentPage - 1) * rowsPerPage;
@@ -1821,6 +1908,43 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        function printFridgeTempChart() {
+            const selectedType = document.getElementById('filter-fridge-type').value;
+            const selectedMonth = document.getElementById('filter-fridge-temp-month').value;
+            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ทั้งหมด';
+
+            document.getElementById('print-fridge-chart-info').innerText = `ประเภทตู้เย็น: ${selectedType} | รอบเดือน: ${formattedMonthText} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+
+            preparePrintSection('print-fridge-chart-slip');
+
+            const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
+            const chartLogs = [...filteredLogs].reverse();
+
+            const printCtx = document.getElementById('printFridgeChartCanvas').getContext('2d');
+            if (printFridgeChartInstance) printFridgeChartInstance.destroy();
+
+            printFridgeChartInstance = new Chart(printCtx, {
+                type: 'line',
+                data: {
+                    labels: chartLogs.map(l => `${l.isoDate || ''} (${l.session || ''})`),
+                    datasets: [
+                        { label: 'ชั้นล่าง (+2 ถึง +8°C)', data: chartLogs.map(l => l.bottomTemp), borderColor: '#0284c7', backgroundColor: '#0284c7', borderWidth: 2, tension: 0.2 },
+                        { label: 'ชั้นบน (-15 ถึง -25°C)', data: chartLogs.map(l => l.topTemp), borderColor: '#2563eb', backgroundColor: '#2563eb', borderWidth: 2, tension: 0.2 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { enabled: true }
+                    }
+                }
+            });
+
+            setTimeout(() => { window.print(); }, 200);
         }
 
         function openAlertModal() {
@@ -1862,7 +1986,7 @@
         }
 
         function preparePrintSection(targetId) {
-            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-room-chart-slip', 'print-fridge-chart-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
@@ -1877,7 +2001,7 @@
         }
 
         window.afterPrint = function() {
-            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-room-chart-slip', 'print-fridge-chart-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
