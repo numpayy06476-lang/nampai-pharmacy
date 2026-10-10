@@ -20,7 +20,6 @@
             th, td { border: 1px solid #000000 !important; padding: 4px 6px !important; word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 9pt !important; }
             th { background-color: #f1f5f9 !important; font-weight: bold !important; text-align: center !important; }
             .signature-section { page-break-inside: avoid !important; margin-top: 20px !important; }
-            .print-chart-box { width: 100% !important; height: 450px !important; page-break-inside: avoid !important; margin: 0 auto !important; }
         }
         @page portrait-setting { size: A4 portrait; margin: 12mm 10mm 12mm 10mm; }
         @page landscape-setting { size: A4 landscape; margin: 8mm 10mm 8mm 10mm; }
@@ -482,20 +481,15 @@
                             <option value="คลังยาย่อย">คลังยาย่อย</option>
                             <option value="ห้องฉุกเฉิน">ห้องฉุกเฉิน</option>
                         </select>
-                        <button onclick="printRoomTempChart()" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิห้อง
-                        </button>
                     </div>
                 </div>
 
-                <!-- กราฟเส้นแสดงอุณหภูมิห้อง -->
+                <!-- กราฟเส้นแสดงอุณหภูมิห้อง (ตามสั่งไม่ต้องแสดงตารางปริ้น) -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line text-sky-600"></i> กราฟเส้นแสดงแนวโน้มอุณหภูมิและความชื้นห้อง (พร้อมระบุตัวเลขบนจุดพอยต์)
-                        </h3>
-                    </div>
-                    <div style="width: 100%; height: 320px;" id="room-chart-container-box">
+                    <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-sky-600"></i> กราฟเส้นแสดงแนวโน้มอุณหภูมิและความชื้นห้อง (พร้อมระบุตัวเลขบนจุดพอยต์)
+                    </h3>
+                    <div style="width: 100%; height: 320px;">
                         <canvas id="roomTempChartCanvas"></canvas>
                     </div>
                 </div>
@@ -621,20 +615,15 @@
                             <option value="ตู้เย็นเก็บยาเย็น">ตู้เย็นเก็บยาเย็น</option>
                             <option value="ตู้เย็นเก็บวัคซีน">ตู้เย็นเก็บวัคซีน</option>
                         </select>
-                        <button onclick="printFridgeTempChart()" class="bg-cyan-700 hover:bg-cyan-800 text-white px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-print"></i> พิมพ์กราฟอุณหภูมิตู้เย็น
-                        </button>
                     </div>
                 </div>
 
-                <!-- กราฟเส้นแสดงอุณหภูมิตู้เย็น -->
+                <!-- กราฟเส้นแสดงอุณหภูมิตู้เย็น (ตามสั่งไม่ต้องแสดงตารางปริ้น) -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line text-cyan-600"></i> กราฟเส้นแสดงอุณหภูมิตู้เย็น (พร้อมระบุตัวเลขบนจุดพอยต์ เช่น -16°C / 4°C)
-                        </h3>
-                    </div>
-                    <div style="width: 100%; height: 320px;" id="fridge-chart-container-box">
+                    <h3 class="font-bold text-sm text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-cyan-600"></i> กราฟเส้นแสดงอุณหภูมิตู้เย็น (พร้อมระบุตัวเลขบนจุดพอยต์ เช่น -16°C / 4°C)
+                    </h3>
+                    <div style="width: 100%; height: 320px;">
                         <canvas id="fridgeTempChartCanvas"></canvas>
                     </div>
                 </div>
@@ -1010,6 +999,7 @@
             </tfoot>
         </table>
 
+        <!-- Summary boxes before signature with carryover, receive, dispense, and remaining balances per category -->
         <div class="my-3 p-3 border border-black rounded text-xs space-y-2 bg-slate-50">
             <h4 class="font-bold text-center border-b pb-1 border-black">สรุปบัญชีมูลค่ายอดยกมา - ยอดรับ - ยอดเบิก - ยอดคงเหลือยกไป (แยกตามหมวดหมู่)</h4>
             <table class="w-full text-xs border-collapse">
@@ -1136,57 +1126,6 @@
         </div>
     </div>
 
-    <!-- Print Chart Slips for Room & Fridge Temp -->
-    <div id="print-room-chart-slip" class="hidden print-only print-container print-page landscape-mode">
-        <div class="text-center pb-2 mb-3 border-b-2 border-black">
-            <h1 class="text-lg font-bold">รายงานกราฟแสดงอุณหภูมิและความชื้นห้อง</h1>
-            <p class="text-sm font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
-            <p class="text-xs mt-0.5" id="print-room-chart-info">-</p>
-        </div>
-        <div class="print-chart-box">
-            <canvas id="printRoomChartCanvas"></canvas>
-        </div>
-        <div class="signature-section grid grid-cols-2 gap-6 text-center text-xs mt-6">
-            <div>
-                <p>ลงชื่อ.............................................ผู้บันทึก/ผู้รายงาน</p>
-                <p class="mt-1.5">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
-                <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ</p>
-                <p class="mt-1.5">วันที่ .........../............/...........</p>
-            </div>
-            <div>
-                <p>ลงชื่อ.............................................ผู้ตรวจสอบ</p>
-                <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
-                <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
-                <p class="mt-1.5">วันที่ .........../............/...........</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="print-fridge-chart-slip" class="hidden print-only print-container print-page landscape-mode">
-        <div class="text-center pb-2 mb-3 border-b-2 border-black">
-            <h1 class="text-lg font-bold">รายงานกราฟแสดงอุณหภูมิตู้เย็นยาและวัคซีน</h1>
-            <p class="text-sm font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
-            <p class="text-xs mt-0.5" id="print-fridge-chart-info">-</p>
-        </div>
-        <div class="print-chart-box">
-            <canvas id="printFridgeChartCanvas"></canvas>
-        </div>
-        <div class="signature-section grid grid-cols-2 gap-6 text-center text-xs mt-6">
-            <div>
-                <p>ลงชื่อ.............................................ผู้บันทึก/ผู้รายงาน</p>
-                <p class="mt-1.5">(น.ส.วรรณนิสา จอยสุข)</p>
-                <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุข</p>
-                <p class="mt-1.5">วันที่ .........../............/...........</p>
-            </div>
-            <div>
-                <p>ลงชื่อ.............................................ผู้ตรวจสอบ</p>
-                <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
-                <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
-                <p class="mt-1.5">วันที่ .........../............/...........</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Application Script -->
     <script>
         const defaultAdmin = { username: 'admin', password: '123', fullname: 'นายสมชาย ใจดี', position: 'นักวิชาการสาธารณสุข' };
@@ -1244,8 +1183,6 @@
 
         let roomChartInstance = null;
         let fridgeChartInstance = null;
-        let printRoomChartInstance = null;
-        let printFridgeChartInstance = null;
 
         const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
 
@@ -1653,6 +1590,7 @@
             const selectedMonth = document.getElementById('filter-room-temp-month').value;
             const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
 
+            // Render Chart for Room Temp with Data Labels on Points
             const chartLogs = [...filteredLogs].reverse();
             const ctx = document.getElementById('roomTempChartCanvas').getContext('2d');
             if (roomChartInstance) roomChartInstance.destroy();
@@ -1686,6 +1624,7 @@
                 }
             });
 
+            // Pagination table
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
             if (tempCurrentPage > totalPages) tempCurrentPage = totalPages;
             const startIdx = (tempCurrentPage - 1) * rowsPerPage;
@@ -1715,43 +1654,6 @@
                     </tr>
                 `;
             }).join('');
-        }
-
-        function printRoomTempChart() {
-            const selectedLoc = document.getElementById('filter-room-location').value;
-            const selectedMonth = document.getElementById('filter-room-temp-month').value;
-            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ทั้งหมด';
-
-            document.getElementById('print-room-chart-info').innerText = `พื้นที่: ${selectedLoc} | รอบเดือน: ${formattedMonthText} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
-
-            preparePrintSection('print-room-chart-slip');
-
-            const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
-            const chartLogs = [...filteredLogs].reverse();
-
-            const printCtx = document.getElementById('printRoomChartCanvas').getContext('2d');
-            if (printRoomChartInstance) printRoomChartInstance.destroy();
-
-            printRoomChartInstance = new Chart(printCtx, {
-                type: 'line',
-                data: {
-                    labels: chartLogs.map(l => `${l.isoDate || ''} (${l.session || ''})`),
-                    datasets: [
-                        { label: 'อุณหภูมิ (°C)', data: chartLogs.map(l => l.temp), borderColor: '#0284c7', backgroundColor: '#0284c7', borderWidth: 2, tension: 0.2 },
-                        { label: 'ความชื้น (%RH)', data: chartLogs.map(l => l.humidity), borderColor: '#059669', backgroundColor: '#059669', borderWidth: 2, borderDash: [4, 4], tension: 0.2 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: { enabled: true }
-                    }
-                }
-            });
-
-            setTimeout(() => { window.print(); }, 200);
         }
 
         function handleFridgeTempSave(e) {
@@ -1850,6 +1752,7 @@
             const selectedMonth = document.getElementById('filter-fridge-temp-month').value;
             const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
 
+            // Render Chart for Fridge Temp with Data Labels
             const chartLogs = [...filteredLogs].reverse();
             const ctx = document.getElementById('fridgeTempChartCanvas').getContext('2d');
             if (fridgeChartInstance) fridgeChartInstance.destroy();
@@ -1883,6 +1786,7 @@
                 }
             });
 
+            // Pagination table
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
             if (fridgeCurrentPage > totalPages) fridgeCurrentPage = totalPages;
             const startIdx = (fridgeCurrentPage - 1) * rowsPerPage;
@@ -1917,43 +1821,6 @@
                     </tr>
                 `;
             }).join('');
-        }
-
-        function printFridgeTempChart() {
-            const selectedType = document.getElementById('filter-fridge-type').value;
-            const selectedMonth = document.getElementById('filter-fridge-temp-month').value;
-            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ทั้งหมด';
-
-            document.getElementById('print-fridge-chart-info').innerText = `ประเภทตู้เย็น: ${selectedType} | รอบเดือน: ${formattedMonthText} | ณ วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'})}`;
-
-            preparePrintSection('print-fridge-chart-slip');
-
-            const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
-            const chartLogs = [...filteredLogs].reverse();
-
-            const printCtx = document.getElementById('printFridgeChartCanvas').getContext('2d');
-            if (printFridgeChartInstance) printFridgeChartInstance.destroy();
-
-            printFridgeChartInstance = new Chart(printCtx, {
-                type: 'line',
-                data: {
-                    labels: chartLogs.map(l => `${l.isoDate || ''} (${l.session || ''})`),
-                    datasets: [
-                        { label: 'ชั้นล่าง (+2 ถึง +8°C)', data: chartLogs.map(l => l.bottomTemp), borderColor: '#0284c7', backgroundColor: '#0284c7', borderWidth: 2, tension: 0.2 },
-                        { label: 'ชั้นบน (-15 ถึง -25°C)', data: chartLogs.map(l => l.topTemp), borderColor: '#2563eb', backgroundColor: '#2563eb', borderWidth: 2, tension: 0.2 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: { enabled: true }
-                    }
-                }
-            });
-
-            setTimeout(() => { window.print(); }, 200);
         }
 
         function openAlertModal() {
@@ -1995,7 +1862,7 @@
         }
 
         function preparePrintSection(targetId) {
-            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-room-chart-slip', 'print-fridge-chart-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
@@ -2010,7 +1877,7 @@
         }
 
         window.afterPrint = function() {
-            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip', 'print-room-chart-slip', 'print-fridge-chart-slip'].forEach(id => {
+            ['print-monthly-slip', 'print-stock-summary-slip', 'print-stock-card-slip'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.classList.add('hidden');
@@ -2482,9 +2349,7 @@
             const item = stockArray.find(i => i.name === drugName);
             if (!item) return;
 
-            if (confirm(`คุณต้องการลบรายการยา "${item.name}" ออกจากระบบถาวรใช่หรือไม่?
-
-(ข้อมูลและประวัติที่เกี่ยวข้องจะถูกตัดออกทั้งหมดไม่ให้นำมาสรุปยอดอีก)`)) {
+            if (confirm(`คุณต้องการลบรายการยา "${item.name}" ออกจากระบบถาวรใช่หรือไม่?\n\n(ข้อมูลและประวัติที่เกี่ยวข้องจะถูกตัดออกทั้งหมดไม่ให้นำมาสรุปยอดอีก)`)) {
                 if (storeType === 'main') {
                     mainStock = mainStock.filter(i => i.name !== drugName);
                 } else {
@@ -2651,11 +2516,9 @@
         }
 
         function exportCSV() {
-            let csv = "﻿วันที่,ประเภท,รายการยา,จำนวน,มูลค่ารวม(บาท),หมายเหตุ
-";
+            let csv = "\uFEFFวันที่,ประเภท,รายการยา,จำนวน,มูลค่ารวม(บาท),หมายเหตุ\n";
             historyLogs.forEach(log => {
-                csv += `"${log.date}","${log.type}","${log.name}",${log.qty},${log.totalCost},"${log.note}"
-`;
+                csv += `"${log.date}","${log.type}","${log.name}",${log.qty},${log.totalCost},"${log.note}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
