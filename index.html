@@ -26,6 +26,25 @@
         @page landscape-setting { size: A4 landscape; margin: 10mm 15mm 10mm 15mm; }
         .portrait-mode { page: portrait-setting; }
         .landscape-mode { page: landscape-setting; }
+
+        /* Responsive สำหรับจอมือถือ (ความกว้างไม่เกิน 768px เท่านั้น ส่วน Desktop คงเดิม) */
+        @media screen and (max-width: 768px) {
+            #sidebar-container {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                height: 100% !important;
+                z-index: 50 !important;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            #sidebar-container.show-mobile-menu {
+                transform: translateX(0) !important;
+            }
+            input, select, button {
+                font-size: 16px !important; /* ป้องกัน iOS ซูมเองอัตโนมัติ */
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800">
@@ -159,9 +178,9 @@
         </header>
 
         <div class="max-w-7xl mx-auto px-2 sm:px-4 py-4 w-full flex-1 flex flex-col md:flex-row gap-4 no-print">
-            <!-- Modern Sidebar Navigation (Responsive Drawer on Mobile) -->
+            <!-- Sidebar Navigation (Desktop แสดงปกติ, Mobile ซ่อนเป็น Drawer) -->
             <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden md:hidden"></div>
-            <aside id="sidebar-container" class="fixed md:static inset-y-0 left-0 w-72 md:w-64 shrink-0 no-print z-50 bg-white md:bg-transparent -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-2xl md:shadow-none p-3 md:p-0 overflow-y-auto">
+            <aside id="sidebar-container" class="w-72 md:w-64 shrink-0 no-print bg-white md:bg-transparent transition-transform duration-300 shadow-2xl md:shadow-none p-3 md:p-0 overflow-y-auto">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3 space-y-1 md:sticky md:top-20">
                     <div class="flex justify-between items-center md:hidden pb-2 mb-2 border-b">
                         <span class="font-bold text-sm text-slate-700">เมนูนำทาง</span>
@@ -223,7 +242,7 @@
                         <span id="cloud-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
                         <span id="cloud-status-text" class="font-medium text-slate-600">สถานะ: ตรวจสอบการเชื่อมต่อ...</span>
                     </div>
-                    <div class="flex items-center justify-between w-sm sm:w-auto gap-3">
+                    <div class="flex items-center justify-between w-full sm:w-auto gap-3">
                         <span id="active-user-indicator" class="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">User: -</span>
                         <button onclick="fetchFromCloud()" class="text-emerald-700 hover:underline flex items-center gap-1 whitespace-nowrap">
                             <i class="fa-solid fa-rotate"></i> โหลดข้อมูลล่าสุด
@@ -1760,12 +1779,12 @@
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar-container');
             const backdrop = document.getElementById('mobile-sidebar-backdrop');
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                backdrop.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
+            if (sidebar.classList.contains('show-mobile-menu')) {
+                sidebar.classList.remove('show-mobile-menu');
                 backdrop.classList.add('hidden');
+            } else {
+                sidebar.classList.add('show-mobile-menu');
+                backdrop.classList.remove('hidden');
             }
         }
 
@@ -2044,7 +2063,7 @@
             // Auto close mobile drawer if open
             const sidebar = document.getElementById('sidebar-container');
             const backdrop = document.getElementById('mobile-sidebar-backdrop');
-            if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+            if (sidebar && sidebar.classList.contains('show-mobile-menu')) {
                 toggleMobileSidebar();
             }
 
