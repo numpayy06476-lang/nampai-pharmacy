@@ -57,7 +57,11 @@
                     <i class="fa-solid fa-hospital-user text-3xl text-emerald-100"></i>
                 </div>
                 <h2 class="text-xl font-bold">ระบบงานเภสัชกรรมปฐมภูมิ</h2>
-                <p class="text-xs text-emerald-200 mt-1">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
+                <!-- แสดงชื่อเต็มบน Desktop และชื่อย่อ/กระชับบนมือถือ -->
+                <p class="text-xs text-emerald-200 mt-1">
+                    <span class="hidden md:inline">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</span>
+                    <span class="md:hidden">รพ.สต.น้ำปาย อ.แม่จริม จ.น่าน</span>
+                </p>
             </div>
 
             <div id="login-box" class="p-6 space-y-4">
@@ -159,7 +163,11 @@
                     <div class="p-2.5 bg-emerald-700 rounded-xl text-2xl shadow-inner hidden sm:flex"><i class="fa-solid fa-hospital-user"></i></div>
                     <div>
                         <h1 class="text-base sm:text-xl font-extrabold tracking-wide leading-tight">ระบบงานเภสัชกรรมปฐมภูมิ</h1>
-                        <p class="text-emerald-100 text-[10px] sm:text-xs font-semibold">รพ.สต.น้ำปาย อ.แม่จริม จ.น่าน</p>
+                        <!-- แสดงชื่อเต็มบน Desktop และชื่อย่อ/กระชับบนมือถือ -->
+                        <p class="text-emerald-100 text-[10px] sm:text-xs font-semibold">
+                            <span class="hidden md:inline">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</span>
+                            <span class="md:hidden">รพ.สต.น้ำปาย อ.แม่จริม จ.น่าน</span>
+                        </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -274,7 +282,7 @@
                                 </div>
                                 <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-coins text-lg"></i></div>
                             </div>
-                            <p class="text-xs text-slate-400 mt-2">รวมคลังใหญ่ + คลังย่อย รพ.สต.น้ำปาย</p>
+                            <p class="text-xs text-slate-400 mt-2">รวมคลังใหญ่ + คลังย่อย โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย</p>
                         </div>
 
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
@@ -317,7 +325,7 @@
                                 <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
                                     <i class="fa-solid fa-print text-emerald-600"></i> พิมพ์ใบเบิกยาสรุปประจำเดือน
                                 </h2>
-                                <p class="text-xs text-slate-500">ออกเอกสารใบเบิกยารวมเฉพาะรายการที่ถูกตัดโอน ส่ง ผอ.รพ.สต.น้ำปาย</p>
+                                <p class="text-xs text-slate-500">ออกเอกสารใบเบิกยารวมเฉพาะรายการที่ถูกตัดโอน ส่ง ผอ.โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย</p>
                             </div>
                             <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                 <input type="month" id="report-month" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white w-full sm:w-auto">
@@ -334,7 +342,7 @@
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
                         <div>
                             <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
-                                <i class="fa-solid fa-warehouse text-blue-600"></i> คลังใหญ่ (Central Warehouse - รพ.สต.น้ำปาย)
+                                <i class="fa-solid fa-warehouse text-blue-600"></i> คลังใหญ่ (Central Warehouse - โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย)
                             </h2>
                             <p class="text-xs text-slate-500">รับยาและเวชภัณฑ์จาก รพ.แม่ข่าย เข้าเก็บคลังศูนย์กลาง</p>
                         </div>
@@ -849,7 +857,7 @@
                             </div>
                             <div class="flex items-end">
                                 <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 w-full text-center">
-                                    <span class="text-xs text-emerald-700 block font-medium">รวมคงเหลือทั้งหมดใน รพ.สต.</span>
+                                    <span class="text-xs text-emerald-700 block font-medium">รวมคงเหลือทั้งหมดในโรงพยาบาล</span>
                                     <span class="text-lg font-bold text-emerald-800" id="card-total-stock">0</span>
                                 </div>
                             </div>
@@ -887,7 +895,7 @@
                                 <h2 class="font-bold text-base text-slate-800 flex items-center gap-2">
                                     <i class="fa-solid fa-user-shield text-rose-600"></i> ทะเบียนผู้ป่วยแพ้ยา
                                 </h2>
-                                <p class="text-xs text-slate-500">บันทึกและจัดการข้อมูลประวัติการแพ้ยาของผู้ป่วยในเขตรับผิดชอบ รพ.สต.น้ำปาย</p>
+                                <p class="text-xs text-slate-500">บันทึกและจัดการข้อมูลประวัติการแพ้ยาของผู้ป่วยในเขตรับผิดชอบ โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย</p>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
                                 <button onclick="printDrugAllergyReport()" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center justify-center gap-1.5 flex-1 sm:flex-none">
@@ -998,7 +1006,7 @@
                             <h2 class="font-bold text-base text-slate-700 flex items-center gap-2">
                                 <i class="fa-solid fa-clock-rotate-left text-slate-600"></i> ประวัติรายการรับเข้า และ เบิก-โอนยา
                             </h2>
-                            <p class="text-xs text-slate-500">ประวัติการเคลื่อนไหวของคลังยา รพ.สต.น้ำปาย ทั้งหมด</p>
+                            <p class="text-xs text-slate-500">ประวัติการเคลื่อนไหวของคลังยา โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย ทั้งหมด</p>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto">
                             <button onclick="clearHistoryLogs()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-1 shadow-sm flex-1 sm:flex-none">
@@ -3541,7 +3549,7 @@
 
         function clearHistoryLogs() {
             if (historyLogs.length === 0) return alert('ไม่มีรายการประวัติ');
-            if (confirm('คุณต้องการล้างประวัติทั้งหมดหรือไม่?')) {
+            if (confirm('คุณต้องการลบประวัติทั้งหมดหรือไม่?')) {
                 historyLogs = [];
                 syncToCloud();
                 renderAll();
@@ -3557,7 +3565,7 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `รายงานการเบิกโอนยา_รพสตน้ำปาย.csv`;
+            link.download = `รายงานการเบิกโอนยา_โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย.csv`;
             link.click();
         }
 
