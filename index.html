@@ -27,7 +27,6 @@
         .portrait-mode { page: portrait-setting; }
         .landscape-mode { page: landscape-setting; }
 
-        /* Responsive สำหรับจอมือถือ (ความกว้างไม่เกิน 768px เท่านั้น ส่วน Desktop คงเดิม) */
         @media screen and (max-width: 768px) {
             #sidebar-container {
                 position: fixed !important;
@@ -42,7 +41,7 @@
                 transform: translateX(0) !important;
             }
             input, select, button {
-                font-size: 16px !important; /* ป้องกัน iOS ซูมเองอัตโนมัติ */
+                font-size: 16px !important;
             }
         }
     </style>
@@ -57,7 +56,6 @@
                     <i class="fa-solid fa-hospital-user text-3xl text-emerald-100"></i>
                 </div>
                 <h2 class="text-xl font-bold">ระบบงานเภสัชกรรมปฐมภูมิ</h2>
-                <!-- แสดงชื่อเต็มบน Desktop และชื่อย่อ/กระชับบนมือถือ -->
                 <p class="text-xs text-emerald-200 mt-1">
                     <span class="hidden md:inline">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</span>
                     <span class="md:hidden">รพ.สต.น้ำปาย อ.แม่จริม จ.น่าน</span>
@@ -152,7 +150,7 @@
         </div>
     </div>
 
-    <!-- Main Content Application Wrappers with Sidebar Layout -->
+    <!-- Main Content Application Wrappers -->
     <div id="app-content" class="hidden min-h-screen flex flex-col">
         <header class="no-print bg-emerald-800 text-white shadow-md sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -163,7 +161,6 @@
                     <div class="p-2.5 bg-emerald-700 rounded-xl text-2xl shadow-inner hidden sm:flex"><i class="fa-solid fa-hospital-user"></i></div>
                     <div>
                         <h1 class="text-base sm:text-xl font-extrabold tracking-wide leading-tight">ระบบงานเภสัชกรรมปฐมภูมิ</h1>
-                        <!-- แสดงชื่อเต็มบน Desktop และชื่อย่อ/กระชับบนมือถือ -->
                         <p class="text-emerald-100 text-[10px] sm:text-xs font-semibold">
                             <span class="hidden md:inline">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</span>
                             <span class="md:hidden">รพ.สต.น้ำปาย อ.แม่จริม จ.น่าน</span>
@@ -186,7 +183,6 @@
         </header>
 
         <div class="max-w-7xl mx-auto px-2 sm:px-4 py-4 w-full flex-1 flex flex-col md:flex-row gap-4 no-print">
-            <!-- Sidebar Navigation (Desktop แสดงปกติ, Mobile ซ่อนเป็น Drawer) -->
             <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden md:hidden"></div>
             <aside id="sidebar-container" class="w-72 md:w-64 shrink-0 no-print bg-white md:bg-transparent transition-transform duration-300 shadow-2xl md:shadow-none p-3 md:p-0 overflow-y-auto">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3 space-y-1 md:sticky md:top-20">
@@ -310,7 +306,7 @@
                         <div onclick="openAlertModal()" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-amber-400 transition group">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-slate-500 text-xs font-medium group-hover:text-amber-600 transition">เตือนสต็อกต่ำ / ใกล้หมดอายุ (&le;3 เดือน)</p>
+                                    <p class="text-slate-500 text-xs font-medium group-hover:text-amber-600 transition">เตือนยาใกล้หมดอายุ (&le;3 เดือน)</p>
                                     <h3 class="text-2xl font-bold text-amber-600 mt-1" id="dash-alert-count">0</h3>
                                 </div>
                                 <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg group-hover:bg-amber-100 transition"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
@@ -1070,7 +1066,7 @@
         </div>
     </div>
 
-    <!-- Modals for Primary Health Functions -->
+    <!-- Modals -->
     <!-- Modal: Drug Allergy Registration -->
     <div id="allergy-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 no-print">
         <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
@@ -1321,7 +1317,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">ราคาต้นทุน/หน่วย (บาท) *</label>
-                        <input type="number" step="0.01" id="add-cost" class="w-full border rounded-lg p-2 text-sm" required>
+                        <input type="number" step="0.01" id="add-cost" class="w-full border rounded-lg p-2 text-sm" placeholder="0.00" required>
                     </div>
                 </div>
                 <div id="exp-field-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1346,7 +1342,7 @@
     <div id="alert-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 no-print">
         <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 class="font-bold text-base text-amber-700 border-b pb-2 flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation"></i> รายการแจ้งเตือนสต็อกต่ำ / ใกล้หมดอายุ
+                <i class="fa-solid fa-triangle-exclamation"></i> รายการแจ้งเตือนยาใกล้หมดอายุ (&le;3 เดือน)
             </h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm min-w-[500px]">
@@ -1521,7 +1517,7 @@
         </div>
     </div>
 
-    <!-- Print Primary Health Registries Slips (A4 Landscape) -->
+    <!-- Print Primary Health Registries Slips -->
     <div id="print-allergy-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-2 mb-3 border-b-2 border-black">
             <h1 class="text-base font-bold">ทะเบียนผู้ป่วยแพ้ยา</h1>
@@ -1625,7 +1621,7 @@
         </div>
     </div>
 
-    <!-- Print Chart Slips for Room & Fridge Temp -->
+    <!-- Print Chart Slips -->
     <div id="print-room-chart-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-1 mb-1 border-b-2 border-black">
             <h1 class="text-sm font-bold">รายงานกราฟและตารางบันทึกอุณหภูมิและความชื้นห้อง</h1>
@@ -1713,7 +1709,7 @@
     <script>
         const defaultAdmin = { username: 'admin', password: '123', fullname: 'นายสมชาย ใจดี', position: 'นักวิชาการสาธารณสุข' };
         
-        const masterDrugList = [
+        let masterDrugList = [
             "Albendazole 200 mg", "Alcohol 70% 450 ml", "Allopurinol 100 mg", "Aluminium + Magnesium susp.", 
             "Amlodipine 5 mg", "Amoxycillin 500 mg", "Aspirin 81 mg", "Atenolol 50 mg", "Calamine lotion", 
             "Calcium carbonate 600 mg", "Cetirizine 10 mg", "Chlorpheniramine 4 mg", "Clotrimazole cream 1%", 
@@ -1751,6 +1747,10 @@
         let printFridgeChartInstance = null;
 
         const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
+        function formatMoney(num) {
+            return parseFloat(num || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
         function getTodayISODate() {
             const today = new Date();
@@ -1796,7 +1796,22 @@
             }
         }
 
+        function refreshDrugDatalist() {
+            const datalist = document.getElementById('drug-suggestions');
+            if(datalist) {
+                datalist.innerHTML = masterDrugList.map(drug => `<option value="${drug}">`).join('');
+            }
+        }
+
         function init() {
+            const savedMasterDrugs = localStorage.getItem('nam_pai_master_drugs');
+            if (savedMasterDrugs) {
+                try { 
+                    const customList = JSON.parse(savedMasterDrugs);
+                    masterDrugList = [...new Set([...masterDrugList, ...customList])];
+                } catch(e) {}
+            }
+
             const savedUsers = localStorage.getItem('nam_pai_users');
             if (savedUsers) {
                 try { usersList = JSON.parse(savedUsers); } catch(e) { usersList = [defaultAdmin]; }
@@ -1829,11 +1844,7 @@
 
             if(cloudUrl) document.getElementById('cloud-url-input').value = cloudUrl;
 
-            const datalist = document.getElementById('drug-suggestions');
-            if(datalist) {
-                datalist.innerHTML = masterDrugList.map(drug => `<option value="${drug}">`).join('');
-            }
-
+            refreshDrugDatalist();
             checkAuthStatus();
         }
 
@@ -1978,6 +1989,7 @@
             localStorage.setItem('nam_pai_allergy', JSON.stringify(allergyPatients));
             localStorage.setItem('nam_pai_warfarin', JSON.stringify(warfarinPatients));
             localStorage.setItem('nam_pai_consumer', JSON.stringify(consumerEstabs));
+            localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
 
             if (!cloudUrl) {
                 updateCloudStatusUI();
@@ -1991,7 +2003,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'SYNC_ALL',
-                        mainStock, subStock, historyLogs, tempLogs, fridgeLogs, usersList, allergyPatients, warfarinPatients, consumerEstabs
+                        mainStock, subStock, historyLogs, tempLogs, fridgeLogs, usersList, allergyPatients, warfarinPatients, consumerEstabs, masterDrugList
                     })
                 });
                 updateCloudStatusUI(true);
@@ -2010,6 +2022,8 @@
                 allergyPatients = JSON.parse(localStorage.getItem('nam_pai_allergy')) || [];
                 warfarinPatients = JSON.parse(localStorage.getItem('nam_pai_warfarin')) || [];
                 consumerEstabs = JSON.parse(localStorage.getItem('nam_pai_consumer')) || [];
+                const savedMaster = JSON.parse(localStorage.getItem('nam_pai_master_drugs'));
+                if(savedMaster) masterDrugList = [...new Set([...masterDrugList, ...savedMaster])];
                 updateCloudStatusUI();
                 renderAll();
                 return;
@@ -2028,6 +2042,7 @@
                     if (data.warfarinPatients) warfarinPatients = data.warfarinPatients;
                     if (data.consumerEstabs) consumerEstabs = data.consumerEstabs;
                     if (data.usersList && data.usersList.length > 0) usersList = data.usersList;
+                    if (data.masterDrugList) masterDrugList = [...new Set([...masterDrugList, ...data.masterDrugList])];
 
                     localStorage.setItem('nam_pai_main', JSON.stringify(mainStock));
                     localStorage.setItem('nam_pai_sub', JSON.stringify(subStock));
@@ -2038,6 +2053,7 @@
                     localStorage.setItem('nam_pai_warfarin', JSON.stringify(warfarinPatients));
                     localStorage.setItem('nam_pai_consumer', JSON.stringify(consumerEstabs));
                     localStorage.setItem('nam_pai_users', JSON.stringify(usersList));
+                    localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
                     updateCloudStatusUI(true);
                 }
             } catch (err) {
@@ -2068,7 +2084,6 @@
                 activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition bg-emerald-700 text-white shadow-sm";
             }
             
-            // Auto close mobile drawer if open
             const sidebar = document.getElementById('sidebar-container');
             const backdrop = document.getElementById('mobile-sidebar-backdrop');
             if (sidebar && sidebar.classList.contains('show-mobile-menu')) {
@@ -2079,6 +2094,7 @@
         }
 
         function renderAll() {
+            refreshDrugDatalist();
             renderDashboard();
             renderMainStock();
             renderSubStock();
@@ -2093,7 +2109,6 @@
             renderConsumerTable();
         }
 
-        /* --- Primary Health Functions Scripts & Printing --- */
         function openAllergyModal() {
             document.getElementById('allergy-edit-index').value = "-1";
             document.getElementById('allergy-modal-title').innerHTML = `<i class="fa-solid fa-user-shield"></i> บันทึกทะเบียนผู้ป่วยแพ้ยา`;
@@ -2245,7 +2260,6 @@
             setTimeout(() => { window.print(); }, 200);
         }
 
-        /* Warfarin Functions */
         function openWarfarinModal() {
             document.getElementById('warfarin-edit-index').value = "-1";
             document.getElementById('warfarin-modal-title').innerHTML = `<i class="fa-solid fa-pills"></i> บันทึกทะเบียนผู้ป่วย Warfarin`;
@@ -2382,7 +2396,6 @@
             setTimeout(() => { window.print(); }, 200);
         }
 
-        /* Consumer Protection Functions */
         function openConsumerModal() {
             document.getElementById('consumer-edit-index').value = "-1";
             document.getElementById('consumer-modal-title').innerHTML = `<i class="fa-solid fa-shop"></i> บันทึกทะเบียนสถานประกอบการ`;
@@ -2519,7 +2532,6 @@
             setTimeout(() => { window.print(); }, 200);
         }
 
-        /* Discharge Popup Functions */
         function openDischargeModal(registryType, idx) {
             document.getElementById('discharge-registry-type').value = registryType;
             document.getElementById('discharge-item-index').value = idx;
@@ -2571,7 +2583,6 @@
             alert('บันทึกการจำหน่ายเรียบร้อยแล้ว');
         }
 
-        /* Temp & Fridge and other existing functions */
         function handleTempSave(e) {
             e.preventDefault();
             const editIndex = parseInt(document.getElementById('temp-edit-index').value);
@@ -2947,19 +2958,20 @@
         }
 
         function openAlertModal() {
-            const lowOrExpiringItems = mainStock.filter(i => i.qty <= 500 || isExpiringWithinMonths(i.exp, 3));
+            // ปรับกรองเฉพาะรายการยาที่ใกล้หมดอายุภายใน 3 เดือน
+            const expiringItems = mainStock.filter(i => isExpiringWithinMonths(i.exp, 3));
             const tbody = document.getElementById('alert-table-body');
-            if(lowOrExpiringItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">ไม่มีรายการยาที่เข้าเกณฑ์สต็อกต่ำหรือใกล้หมดอายุ</td></tr>`;
+            if(expiringItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">ไม่มีรายการยาที่ใกล้หมดอายุภายใน 3 เดือน</td></tr>`;
             } else {
-                tbody.innerHTML = lowOrExpiringItems.map(item => {
+                tbody.innerHTML = expiringItems.map(item => {
                     return `
                         <tr class="hover:bg-slate-50">
                             <td class="p-2.5 font-semibold text-slate-800">${item.name}</td>
                             <td class="p-2.5"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded">${item.category}</span></td>
                             <td class="p-2.5 text-right font-bold text-amber-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
                             <td class="p-2.5 text-center text-xs text-slate-600">${formatThaiDate(item.exp)}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
-                            <td class="p-2.5 text-center text-xs"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">แจ้งเตือน</span></td>
+                            <td class="p-2.5 text-center text-xs"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">ใกล้หมดอายุ</span></td>
                         </tr>
                     `;
                 }).join('');
@@ -3006,12 +3018,12 @@
                         <td>${item.name}</td>
                         <td>${item.category}</td>
                         <td style="text-align: right;">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td style="text-align: right;">${parseFloat(item.unitCost).toFixed(2)}</td>
-                        <td style="text-align: right;">${total.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td style="text-align: right;">${formatMoney(item.unitCost)}</td>
+                        <td style="text-align: right;">${formatMoney(total)}</td>
                     </tr>
                 `;
             }).join('');
-            document.getElementById('print-summary-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('print-summary-grand-total').innerText = `฿${formatMoney(grandTotal)}`;
             preparePrintSection('print-stock-summary-slip');
             setTimeout(() => { window.print(); }, 100);
         }
@@ -3032,12 +3044,12 @@
                         <td>${item.name}</td>
                         <td>${item.category}</td>
                         <td style="text-align: right;">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td style="text-align: right;">${parseFloat(item.unitCost).toFixed(2)}</td>
-                        <td style="text-align: right;">${total.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td style="text-align: right;">${formatMoney(item.unitCost)}</td>
+                        <td style="text-align: right;">${formatMoney(total)}</td>
                     </tr>
                 `;
             }).join('');
-            document.getElementById('print-summary-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('print-summary-grand-total').innerText = `฿${formatMoney(grandTotal)}`;
             preparePrintSection('print-stock-summary-slip');
             setTimeout(() => { window.print(); }, 100);
         }
@@ -3052,7 +3064,7 @@
             document.getElementById('print-card-name').innerText = selectedName;
             document.getElementById('print-card-cat').innerText = mainItem.category || '-';
             document.getElementById('print-card-unit').innerText = mainItem.unit || '-';
-            document.getElementById('print-card-cost').innerText = parseFloat(mainItem.unitCost || 0).toFixed(2);
+            document.getElementById('print-card-cost').innerText = formatMoney(mainItem.unitCost || 0);
             document.getElementById('print-card-stock').innerText = `คลังใหญ่: ${mainItem.qty || 0} | คลังย่อย: ${subItem.qty || 0}`;
 
             const filteredLogs = historyLogs.filter(log => log.name === selectedName).reverse();
@@ -3108,14 +3120,14 @@
                             <td>${log.name}</td>
                             <td style="text-align: center;">${item.unit || 'เม็ด'}</td>
                             <td style="text-align: right;">${parseInt(log.qty).toLocaleString()}</td>
-                            <td style="text-align: right;">${parseFloat(item.unitCost || 0).toFixed(2)}</td>
-                            <td style="text-align: right; font-weight: 500;">${parseFloat(log.totalCost || 0).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                            <td style="text-align: right;">${formatMoney(item.unitCost || 0)}</td>
+                            <td style="text-align: right; font-weight: 500;">${formatMoney(log.totalCost || 0)}</td>
                         </tr>
                     `;
                 }).join('');
             }
 
-            document.getElementById('print-grand-total').innerText = `฿${grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('print-grand-total').innerText = `฿${formatMoney(grandTotal)}`;
 
             const categories = ["ยาทั่วไป", "เวชภัณฑ์", "วัสดุวิทยาศาสตร์การแพทย์"];
             const catSummaryTbody = document.getElementById('print-category-financial-summary');
@@ -3144,10 +3156,10 @@
                 return `
                     <tr>
                         <td style="border:1px solid black; padding:3px; font-weight:bold;">${displayCatName}</td>
-                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${carryOverVal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${receivedVal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${dispensedVal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
-                        <td style="border:1px solid black; padding:3px; text-align:right; font-weight:bold;">฿${currentVal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${formatMoney(carryOverVal)}</td>
+                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${formatMoney(receivedVal)}</td>
+                        <td style="border:1px solid black; padding:3px; text-align:right;">฿${formatMoney(dispensedVal)}</td>
+                        <td style="border:1px solid black; padding:3px; text-align:right; font-weight:bold;">฿${formatMoney(currentVal)}</td>
                     </tr>
                 `;
             }).join('');
@@ -3164,14 +3176,15 @@
             const fiscalLogs = historyLogs.filter(log => log.type === 'เบิกโอนเข้าคลังย่อย' && isFiscalYearDate(log.isoDate || getTodayISODate(), fiscalYear));
             const dispensedFiscalVal = fiscalLogs.reduce((acc, log) => acc + parseFloat(log.totalCost || 0), 0);
 
-            document.getElementById('dash-total-val').innerText = `฿${(mainVal + subVal).toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('dash-main-val').innerText = `฿${mainVal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('dash-sub-val').innerText = `฿${dispensedFiscalVal.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('dash-total-val').innerText = `฿${formatMoney(mainVal + subVal)}`;
+            document.getElementById('dash-main-val').innerText = `฿${formatMoney(mainVal)}`;
+            document.getElementById('dash-sub-val').innerText = `฿${formatMoney(dispensedFiscalVal)}`;
             document.getElementById('dash-main-items').innerText = `${mainStock.length} รายการ`;
             document.getElementById('dash-sub-items').innerText = `${fiscalLogs.length} รายการเบิกโอนในปีงบ`;
 
-            const lowOrExpiringCount = mainStock.filter(i => i.qty <= 500 || isExpiringWithinMonths(i.exp, 3)).length;
-            document.getElementById('dash-alert-count').innerText = lowOrExpiringCount;
+            // ปรับการคำนวณนับเฉพาะรายการที่ใกล้หมดอายุภายใน 3 เดือน
+            const expiringCount = mainStock.filter(i => isExpiringWithinMonths(i.exp, 3)).length;
+            document.getElementById('dash-alert-count').innerText = expiringCount;
         }
 
         function renderMainStock() {
@@ -3197,8 +3210,8 @@
                         <td class="p-3 font-semibold text-slate-800">${item.name}</td>
                         <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
                         <td class="p-3 text-right font-bold text-blue-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
-                        <td class="p-3 text-right font-semibold text-slate-700">฿${rowTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
+                        <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
                         <td class="p-3 text-xs text-slate-500">${formatThaiDate(item.exp)}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
                         <td class="p-3 text-center space-x-1 whitespace-nowrap">
                             <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
@@ -3209,10 +3222,10 @@
                 `;
             }).join('');
 
-            document.getElementById('main-drug-sum-footer').innerText = `฿${drugSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('main-supplies-sum-footer').innerText = `฿${suppliesSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('main-lab-sum-footer').innerText = `฿${labSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('main-total-sum-footer').innerText = `฿${(drugSum + suppliesSum + labSum).toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('main-drug-sum-footer').innerText = `฿${formatMoney(drugSum)}`;
+            document.getElementById('main-supplies-sum-footer').innerText = `฿${formatMoney(suppliesSum)}`;
+            document.getElementById('main-lab-sum-footer').innerText = `฿${formatMoney(labSum)}`;
+            document.getElementById('main-total-sum-footer').innerText = `฿${formatMoney(drugSum + suppliesSum + labSum)}`;
         }
 
         function renderSubStock() {
@@ -3240,8 +3253,8 @@
                         <td class="p-3 font-semibold text-slate-800">${item.name}</td>
                         <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
                         <td class="p-3 text-right font-bold text-indigo-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td class="p-3 text-right">฿${parseFloat(item.unitCost).toFixed(2)}</td>
-                        <td class="p-3 text-right font-semibold text-slate-700">฿${rowTotal.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                        <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
+                        <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
                         <td class="p-3 text-xs text-slate-500 font-mono">${lotText}</td>
                         <td class="p-3 text-center space-x-1 whitespace-nowrap">
                             <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
@@ -3252,10 +3265,10 @@
                 `;
             }).join('');
 
-            document.getElementById('sub-drug-sum-footer').innerText = `฿${drugSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('sub-supplies-sum-footer').innerText = `฿${suppliesSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('sub-lab-sum-footer').innerText = `฿${labSum.toLocaleString('th-TH', {minimumFractionDigits:2})}`;
-            document.getElementById('sub-total-sum-footer').innerText = `฿${(drugSum + suppliesSum + labSum).toLocaleString('th-TH', {minimumFractionDigits:2})}`;
+            document.getElementById('sub-drug-sum-footer').innerText = `฿${formatMoney(drugSum)}`;
+            document.getElementById('sub-supplies-sum-footer').innerText = `฿${formatMoney(suppliesSum)}`;
+            document.getElementById('sub-lab-sum-footer').innerText = `฿${formatMoney(labSum)}`;
+            document.getElementById('sub-total-sum-footer').innerText = `฿${formatMoney(drugSum + suppliesSum + labSum)}`;
         }
 
         function renderTransferOptions() {
@@ -3308,7 +3321,7 @@
                     <td class="p-2.5 text-xs text-slate-500">${log.date}</td>
                     <td class="p-2.5 font-semibold text-slate-700">${log.name}</td>
                     <td class="p-2.5 text-right font-bold text-amber-600">-${parseInt(log.qty).toLocaleString()}</td>
-                    <td class="p-2.5 text-right font-semibold">฿${parseFloat(log.totalCost).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                    <td class="p-2.5 text-right font-semibold">฿${formatMoney(log.totalCost)}</td>
                     <td class="p-2.5 text-xs text-slate-600">${log.note}</td>
                 </tr>
             `).join('');
@@ -3384,7 +3397,7 @@
             document.getElementById('add-category').value = item.category || 'ยาทั่วไป';
             document.getElementById('add-unit').value = item.unit || 'เม็ด';
             document.getElementById('add-qty').value = item.qty;
-            document.getElementById('add-cost').value = item.unitCost;
+            document.getElementById('add-cost').value = parseFloat(item.unitCost).toFixed(2);
 
             if (storeType === 'main') {
                 document.getElementById('exp-field-container').classList.remove('hidden');
@@ -3430,6 +3443,10 @@
             const author = currentUser ? currentUser.fullname : 'นายสมชาย ใจดี';
             const now = new Date().toLocaleString('th-TH');
             const isoNow = getTodayISODate();
+
+            if (name && !masterDrugList.includes(name)) {
+                masterDrugList.push(name);
+            }
 
             if (isEdit) {
                 const stockArray = storeType === 'main' ? mainStock : subStock;
@@ -3486,7 +3503,7 @@
 
             document.getElementById('card-total-stock').innerText = `${(mainQty + subQty).toLocaleString()} ${mainItem.unit}`;
             document.getElementById('info-name').innerText = selectedName || '-';
-            document.getElementById('info-unit-cost').innerText = `${mainItem.unit} (฿${parseFloat(mainItem.unitCost || 0).toFixed(2)}/หน่วย)`;
+            document.getElementById('info-unit-cost').innerText = `${mainItem.unit} (฿${formatMoney(mainItem.unitCost || 0)}/หน่วย)`;
             document.getElementById('info-breakdown').innerText = `คลังใหญ่: ${mainQty} | คลังย่อย: ${subQty}`;
 
             const filteredLogs = historyLogs.filter(log => log.name === selectedName).reverse();
@@ -3541,7 +3558,7 @@
                     <td class="p-3"><span class="px-2 py-0.5 text-xs font-semibold rounded ${log.type.includes('เบิก') ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}">${log.type}</span></td>
                     <td class="p-3 font-semibold text-slate-800">${log.name}</td>
                     <td class="p-3 text-right font-bold">${parseInt(log.qty).toLocaleString()}</td>
-                    <td class="p-3 text-right text-slate-700">฿${parseFloat(log.totalCost).toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+                    <td class="p-3 text-right text-slate-700">฿${formatMoney(log.totalCost)}</td>
                     <td class="p-3 text-xs text-slate-600">${log.note}</td>
                 </tr>
             `).join('');
@@ -3560,7 +3577,7 @@
         function exportCSV() {
             let csv = "\uFEFFวันที่,ประเภท,รายการยา,จำนวน,มูลค่ารวม(บาท),หมายเหตุ\n";
             historyLogs.forEach(log => {
-                csv += `"${log.date}","${log.type}","${log.name}",${log.qty},${log.totalCost},"${log.note}"\n`;
+                csv += `"${log.date}","${log.type}","${log.name}",${log.qty},${formatMoney(log.totalCost)},"${log.note}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
