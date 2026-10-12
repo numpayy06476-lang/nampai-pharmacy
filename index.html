@@ -20,7 +20,7 @@
             th, td { border: 1px solid #000000 !important; padding: 4px 6px !important; word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 9pt !important; }
             th { background-color: #f1f5f9 !important; font-weight: bold !important; text-align: center !important; }
             .signature-section { page-break-inside: avoid !important; margin-top: 20px !important; }
-            .print-chart-box { width: 100% !important; height: 260px !important; page-break-inside: avoid !important; margin: 0 auto 10px auto !important; }
+            .print-chart-box { width: 100% !important; height: 380px !important; page-break-inside: avoid !important; margin: 0 auto 10px auto !important; }
         }
         @page portrait-setting { size: A4 portrait; margin: 12mm 10mm 12mm 10mm; }
         @page landscape-setting { size: A4 landscape; margin: 10mm 15mm 10mm 15mm; }
@@ -666,7 +666,7 @@
                                     <table class="w-full text-left text-sm min-w-[650px]">
                                         <thead class="bg-slate-100 text-slate-600 font-semibold text-xs border-b">
                                             <tr>
-                                                <th class="p-3">วันที่ (พ.ศ.) / เวลา</th>
+                                                <th class="p-3">วันที่ (พ.ศ.)</th>
                                                 <th class="p-3">ช่วงเวลาตรวจ</th>
                                                 <th class="p-3">หน่วยย่อย / พื้นที่</th>
                                                 <th class="p-3 text-center">อุณหภูมิ (°C)</th>
@@ -825,7 +825,7 @@
                                     <table class="w-full text-left text-sm min-w-[700px]">
                                         <thead class="bg-slate-100 text-slate-600 font-semibold text-xs border-b">
                                             <tr>
-                                                <th class="p-3">วันที่ (พ.ศ.) / เวลา</th>
+                                                <th class="p-3">วันที่ (พ.ศ.)</th>
                                                 <th class="p-3">ช่วงเวลาตรวจ</th>
                                                 <th class="p-3">ตู้เย็น</th>
                                                 <th class="p-3 text-center">ชั้นบน</th>
@@ -893,7 +893,7 @@
                                         <th class="p-3 text-right">รับเข้าคลังใหญ่</th>
                                         <th class="p-3 text-right">โอนออกคลังย่อย</th>
                                         <th class="p-3 text-right font-bold bg-slate-200/50">คงเหลือยอดยกไป</th>
-                                        <th class="p-3">เจ้าหน้าที่ผู้บันทึก / หมายเหตุ</th>
+                                        <th class="p-3">รายการ / ผู้บันทึก</th>
                                     </tr>
                                 </thead>
                                 <tbody id="stock-card-table-body" class="divide-y divide-slate-100"></tbody>
@@ -1428,19 +1428,19 @@
 
         <div class="signature-section grid grid-cols-3 gap-2 text-center text-xs">
             <div>
-                <p>ลงชื่อ..............................................ผู้เบิก</p>
+                <p>ลงชื่อ.............................................ผู้เบิก</p>
                 <p class="mt-1.5">(นางกิตติกา วัฒนะ)</p>
                 <p class="text-slate-700 mt-0.5">ตำแหน่ง พยาบาลวิชาชีพชำนาญการ</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
             </div>
             <div>
-                <p>ลงชื่อ..............................................ผู้จ่าย</p>
+                <p>ลงชื่อ.............................................ผู้จ่าย</p>
                 <p class="mt-1.5">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
                 <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
             </div>
             <div>
-                <p>ลงชื่อ..............................................ผู้อนุมัติ</p>
+                <p>ลงชื่อ.............................................ผู้อนุมัติ</p>
                 <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
                 <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
@@ -1490,7 +1490,7 @@
         </div>
     </div>
 
-    <!-- Print Stock Card (ปรับปรุง: เปลี่ยนคำหัวข้อ และตัดช่องผู้บันทึกออก) -->
+    <!-- Print Stock Card -->
     <div id="print-stock-card-slip" class="hidden print-only print-container print-page portrait-mode">
         <div class="text-center pb-2 mb-3 border-b-2 border-black">
             <h1 class="text-lg font-bold">บัตรควบคุมเวชภัณฑ์ (Stock Card)</h1>
@@ -1642,31 +1642,15 @@
     <!-- Print Chart Slips -->
     <div id="print-room-chart-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-1 mb-1 border-b-2 border-black">
-            <h1 class="text-sm font-bold">รายงานกราฟและตารางบันทึกอุณหภูมิและความชื้นห้อง</h1>
+            <h1 class="text-sm font-bold">รายงานกราฟบันทึกอุณหภูมิและความชื้นห้อง</h1>
             <p class="text-[10px] font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
             <p class="text-[10px]" id="print-room-chart-info">-</p>
         </div>
         <div class="print-chart-box">
             <canvas id="printRoomChartCanvas"></canvas>
         </div>
-        
-        <div class="mt-2">
-            <h3 class="font-bold text-[10px] mb-1">ตารางบันทึกข้อมูลประจำวัน:</h3>
-            <table class="w-full text-[8.5px]">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">ลำดับ</th>
-                        <th style="width: 35%;">วัน เดือน ปี (เวลา)</th>
-                        <th style="width: 20%; text-align:center;">ช่วงเวลา</th>
-                        <th style="width: 17.5%; text-align:center;">อุณหภูมิ (°C)</th>
-                        <th style="width: 17.5%; text-align:center;">ความชื้น (%RH)</th>
-                    </tr>
-                </thead>
-                <tbody id="print-room-table-body"></tbody>
-            </table>
-        </div>
 
-        <div class="signature-section grid grid-cols-2 gap-4 text-center text-[9px] mt-3">
+        <div class="signature-section grid grid-cols-2 gap-4 text-center text-[9px] mt-6">
             <div>
                 <p>ลงชื่อ.......................................................ผู้บันทึก/ผู้รายงาน</p>
                 <p class="mt-1">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
@@ -1684,7 +1668,7 @@
 
     <div id="print-fridge-chart-slip" class="hidden print-only print-container print-page landscape-mode">
         <div class="text-center pb-1 mb-1 border-b-2 border-black">
-            <h1 class="text-sm font-bold">รายงานกราฟและตารางบันทึกอุณหภูมิตู้เย็นยาและวัคซีน</h1>
+            <h1 class="text-sm font-bold">รายงานกราฟบันทึกอุณหภูมิตู้เย็นยาและวัคซีน</h1>
             <p class="text-[10px] font-medium">โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย อำเภอแม่จริม จังหวัดน่าน</p>
             <p class="text-[10px]" id="print-fridge-chart-info">-</p>
         </div>
@@ -1692,23 +1676,7 @@
             <canvas id="printFridgeChartCanvas"></canvas>
         </div>
 
-        <div class="mt-2">
-            <h3 class="font-bold text-[10px] mb-1">ตารางบันทึกข้อมูลประจำวัน:</h3>
-            <table class="w-full text-[8.5px]">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">ลำดับ</th>
-                        <th style="width: 35%;">วัน เดือน ปี (เวลา)</th>
-                        <th style="width: 20%; text-align:center;">ช่วงเวลา</th>
-                        <th style="width: 17.5%; text-align:center;">ชั้นบน (ช่องแช่แข็ง)</th>
-                        <th style="width: 17.5%; text-align:center;">ชั้นล่าง (ช่องแช่เย็น)</th>
-                    </tr>
-                </thead>
-                <tbody id="print-fridge-table-body"></tbody>
-            </table>
-        </div>
-
-        <div class="signature-section grid grid-cols-2 gap-4 text-center text-[9px] mt-3">
+        <div class="signature-section grid grid-cols-2 gap-4 text-center text-[9px] mt-6">
             <div>
                 <p>ลงชื่อ.......................................................ผู้บันทึก/ผู้รายงาน</p>
                 <p class="mt-1">(น.ส.วรรณนิสา จอยสุข)</p>
@@ -2734,7 +2702,19 @@
                         { label: 'ความชื้น (%RH)', data: chartLogs.map(l => l.humidity), borderColor: '#16a34a', backgroundColor: '#16a34a', pointBackgroundColor: '#15803d', pointRadius: 4, borderWidth: 3, borderDash: [4, 4], tension: 0.2 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            min: 0, 
+                            max: 100,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
             });
 
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
@@ -2754,7 +2734,7 @@
                 const actualIndex = tempLogs.indexOf(log);
                 return `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 text-xs text-slate-600 font-medium">${formatThaiDate(log.isoDate, log.time)}</td>
+                        <td class="p-3 text-xs text-slate-600 font-medium">${formatThaiDate(log.isoDate)}</td>
                         <td class="p-3"><span class="px-2 py-0.5 text-xs font-semibold rounded bg-sky-100 text-sky-800">${log.session || 'เช้า'}</span></td>
                         <td class="p-3 font-semibold text-slate-700">${log.location}</td>
                         <td class="p-3 text-center font-bold ${log.temp > 25 ? 'text-rose-600' : 'text-slate-800'}">${log.temp}°C</td>
@@ -2779,21 +2759,6 @@
             const filteredLogs = tempLogs.filter(log => log.location === selectedLoc && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
             const chartLogs = [...filteredLogs].reverse();
 
-            const printTbody = document.getElementById('print-room-table-body');
-            if (filteredLogs.length === 0) {
-                printTbody.innerHTML = `<tr><td colspan="5" class="text-center p-2">ไม่พบข้อมูลบันทึกในรอบเดือนนี้</td></tr>`;
-            } else {
-                printTbody.innerHTML = filteredLogs.map((l, i) => `
-                    <tr>
-                        <td style="text-align: center;">${i + 1}</td>
-                        <td>${formatThaiDate(l.isoDate, l.time)}</td>
-                        <td style="text-align: center;">${l.session || '-'}</td>
-                        <td style="text-align: center; font-weight: bold;">${l.temp} °C</td>
-                        <td style="text-align: center; font-weight: bold;">${l.humidity} %</td>
-                    </tr>
-                `).join('');
-            }
-
             const printCtx = document.getElementById('printRoomChartCanvas').getContext('2d');
             if (printRoomChartInstance) printRoomChartInstance.destroy();
 
@@ -2806,7 +2771,19 @@
                         { label: 'ความชื้น (%RH)', data: chartLogs.map(l => l.humidity), borderColor: '#16a34a', backgroundColor: '#16a34a', pointRadius: 3, borderWidth: 2.5, borderDash: [4, 4], tension: 0.2 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            min: 0, 
+                            max: 100,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
             });
 
             setTimeout(() => { window.print(); }, 200);
@@ -2921,7 +2898,19 @@
                         { label: 'ชั้นบน [ช่องแช่แข็ง -15 ถึง -25°C]', data: chartLogs.map(l => l.topTemp), borderColor: '#7c3aed', backgroundColor: '#7c3aed', pointBackgroundColor: '#6d28d9', pointRadius: 4, borderWidth: 3, borderDash: [4, 4], tension: 0.2 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            min: -30, 
+                            max: 10,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
             });
 
             const totalPages = Math.ceil(filteredLogs.length / rowsPerPage) || 1;
@@ -2941,7 +2930,7 @@
                 const actualIndex = fridgeLogs.indexOf(log);
                 return `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 text-xs text-slate-600 font-medium">${formatThaiDate(log.isoDate, log.time)}</td>
+                        <td class="p-3 text-xs text-slate-600 font-medium">${formatThaiDate(log.isoDate)}</td>
                         <td class="p-3"><span class="px-2 py-0.5 text-xs font-semibold rounded bg-cyan-100 text-cyan-800">${log.session || 'เช้า'}</span></td>
                         <td class="p-3 font-semibold text-slate-800">${log.type}</td>
                         <td class="p-3 text-center font-bold">${log.topTemp} °C</td>
@@ -2971,21 +2960,6 @@
             const filteredLogs = fridgeLogs.filter(log => log.type === selectedType && (!selectedMonth || (log.isoDate && log.isoDate.startsWith(selectedMonth))));
             const chartLogs = [...filteredLogs].reverse();
 
-            const printTbody = document.getElementById('print-fridge-table-body');
-            if (filteredLogs.length === 0) {
-                printTbody.innerHTML = `<tr><td colspan="5" class="text-center p-2">ไม่พบข้อมูลบันทึกในรอบเดือนนี้</td></tr>`;
-            } else {
-                printTbody.innerHTML = filteredLogs.map((l, i) => `
-                    <tr>
-                        <td style="text-align: center;">${i + 1}</td>
-                        <td>${formatThaiDate(l.isoDate, l.time)}</td>
-                        <td style="text-align: center;">${l.session || '-'}</td>
-                        <td style="text-align: center; font-weight: bold;">${l.topTemp} °C</td>
-                        <td style="text-align: center; font-weight: bold;">${l.bottomTemp} °C</td>
-                    </tr>
-                `).join('');
-            }
-
             const printCtx = document.getElementById('printFridgeChartCanvas').getContext('2d');
             if (printFridgeChartInstance) printFridgeChartInstance.destroy();
 
@@ -2998,7 +2972,19 @@
                         { label: 'ชั้นบน [ช่องแช่แข็ง]', data: chartLogs.map(l => l.topTemp), borderColor: '#7c3aed', backgroundColor: '#7c3aed', pointRadius: 3, borderWidth: 2.5, borderDash: [4, 4], tension: 0.2 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            min: -30, 
+                            max: 10,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
             });
 
             setTimeout(() => { window.print(); }, 200);
@@ -3104,7 +3090,6 @@
             setTimeout(() => { window.print(); }, 100);
         }
 
-        // ปรับปรุงฟังก์ชันการพิมพ์ Stock Card แบบตัดคอลัมน์ผู้บันทึกออก
         function printSingleStockCard() {
             const selectedName = document.getElementById('stock-card-drug-select').value;
             if(!selectedName) return alert('กรุณาเลือกรายการยา');
@@ -3418,7 +3403,6 @@
             `).join('');
         }
 
-        // ปรับปรุงการบันทึกการเบิกโอนยาให้รองรับวันที่จากตัวเลือกปฏิทิน
         function handleTransfer(e) {
             e.preventDefault();
             const transferDtLocal = document.getElementById('transfer-date').value;
