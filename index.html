@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
-<head><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%23065f46'/><path d='M216 112 h80 v104 h104 v80 h-104 v104 h-80 v-104 h-104 v-80 h104 z' fill='%23ffffff'/><g transform='translate(310, 310) rotate(-45)'><rect x='-35' y='-70' width='70' height='140' rx='35' fill='%2334d399' stroke='%23ffffff' stroke-width='8'/><line x1='-35' y1='0' x2='35' y2='0' stroke='%23ffffff' stroke-width='8'/></g></svg>">
+<head><head><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%23065f46'/><path d='M216 112 h80 v104 h104 v80 h-104 v104 h-80 v-104 h-104 v-80 h104 z' fill='%23ffffff'/><g transform='translate(310, 310) rotate(-45)'><rect x='-35' y='-70' width='70' height='140' rx='35' fill='%2334d399' stroke='%23ffffff' stroke-width='8'/><line x1='-35' y1='0' x2='35' y2='0' stroke='%23ffffff' stroke-width='8'/></g></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบงานเภสัชกรรมปฐมภูมิ - โรงพยาบาลส่งเสริมสุขภาพตำบลน้ำปาย</title>
@@ -485,6 +485,11 @@
                         </div>
 
                         <form id="transfer-form" onsubmit="handleTransfer(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-regular fa-calendar-days text-amber-600 mr-1"></i>วันที่ - เวลา ที่ทำรายการเบิกโอน *</label>
+                                <input type="datetime-local" id="transfer-date" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white font-medium text-slate-800" required>
+                            </div>
+
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">พิมพ์ค้นหาหรือเลือกรายการยาในคลังใหญ่ *</label>
                                 <input type="text" id="transfer-drug-search" list="transfer-drug-options" placeholder="พิมพ์ชื่อยาเพื่อค้นหา..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required oninput="onTransferDrugSelected()">
@@ -1423,19 +1428,19 @@
 
         <div class="signature-section grid grid-cols-3 gap-2 text-center text-xs">
             <div>
-                <p>ลงชื่อ.............................................ผู้เบิก</p>
+                <p>ลงชื่อ..............................................ผู้เบิก</p>
                 <p class="mt-1.5">(นางกิตติกา วัฒนะ)</p>
                 <p class="text-slate-700 mt-0.5">ตำแหน่ง พยาบาลวิชาชีพชำนาญการ</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
             </div>
             <div>
-                <p>ลงชื่อ.............................................ผู้จ่าย</p>
+                <p>ลงชื่อ..............................................ผู้จ่าย</p>
                 <p class="mt-1.5">(น.ส.รัชฎาวรรณ จันทร์สุข)</p>
                 <p class="text-slate-700 mt-0.5">ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
             </div>
             <div>
-                <p>ลงชื่อ.............................................ผู้อนุมัติ</p>
+                <p>ลงชื่อ..............................................ผู้อนุมัติ</p>
                 <p class="mt-1.5">(นายปรัชญา วัฒนะ)</p>
                 <p class="text-slate-700 mt-0.5">ผู้อำนวยการ รพ.สต.น้ำปาย</p>
                 <p class="mt-1.5">วันที่ .........../............/...........</p>
@@ -1485,7 +1490,7 @@
         </div>
     </div>
 
-    <!-- Print Stock Card -->
+    <!-- Print Stock Card (ปรับปรุง: เปลี่ยนคำหัวข้อ และตัดช่องผู้บันทึกออก) -->
     <div id="print-stock-card-slip" class="hidden print-only print-container print-page portrait-mode">
         <div class="text-center pb-2 mb-3 border-b-2 border-black">
             <h1 class="text-lg font-bold">บัตรควบคุมเวชภัณฑ์ (Stock Card)</h1>
@@ -1505,12 +1510,11 @@
         <table class="w-full text-xs">
             <thead>
                 <tr>
-                    <th style="width: 18%;">วัน/เดือน/ปี</th>
-                    <th style="width: 32%;">รายการ / เหตุผล</th>
+                    <th style="width: 20%;">วัน/เดือน/ปี</th>
+                    <th style="width: 44%;">รายการ / ผู้บันทึก</th>
                     <th style="width: 12%;">รับเข้าคลังใหญ่</th>
                     <th style="width: 12%;">โอนออกคลังย่อย</th>
                     <th style="width: 12%;">คงเหลือยกไป</th>
-                    <th style="width: 14%;">ผู้บันทึก</th>
                 </tr>
             </thead>
             <tbody id="print-card-table-body"></tbody>
@@ -1757,7 +1761,7 @@
         let tempCurrentPage = 1;
         let fridgeCurrentPage = 1;
         let historyCurrentPage = 1;
-        const rowsPerPage = 10; // ปรับให้แสดง 10 รายการต่อหน้าตามต้องการ
+        const rowsPerPage = 10;
 
         let roomChartInstance = null;
         let fridgeChartInstance = null;
@@ -1775,11 +1779,30 @@
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         }
 
+        function getNowDateTimeLocal() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
         function formatThaiDate(isoDateStr, timeStr = '') {
             if (!isoDateStr) return '-';
             const parts = isoDateStr.split('-');
             if (parts.length < 3) return isoDateStr;
             return `${parts[2]}/${parts[1]}/${parseInt(parts[0]) + 543} ${timeStr ? '(' + timeStr + ')' : ''}`;
+        }
+
+        function formatThaiDateTimeFromLocal(dtLocalStr) {
+            if (!dtLocalStr) return new Date().toLocaleString('th-TH');
+            const [datePart, timePart] = dtLocalStr.split('T');
+            if (!datePart) return dtLocalStr;
+            const parts = datePart.split('-');
+            if (parts.length < 3) return dtLocalStr;
+            return `${parts[2]}/${parts[1]}/${parseInt(parts[0]) + 543} ${timePart || ''}`;
         }
 
         function isExpiringWithinMonths(expDateStr, monthsThreshold = 3) {
@@ -1859,6 +1882,7 @@
             document.getElementById('temp-date').value = todayISO;
             document.getElementById('fridge-date').value = todayISO;
             document.getElementById('allergy-date').value = todayISO;
+            document.getElementById('transfer-date').value = getNowDateTimeLocal();
 
             if(cloudUrl) document.getElementById('cloud-url-input').value = cloudUrl;
 
@@ -3080,6 +3104,7 @@
             setTimeout(() => { window.print(); }, 100);
         }
 
+        // ปรับปรุงฟังก์ชันการพิมพ์ Stock Card แบบตัดคอลัมน์ผู้บันทึกออก
         function printSingleStockCard() {
             const selectedName = document.getElementById('stock-card-drug-select').value;
             if(!selectedName) return alert('กรุณาเลือกรายการยา');
@@ -3108,7 +3133,6 @@
                         <td style="text-align: right;">${inQty > 0 ? inQty.toLocaleString() : '-'}</td>
                         <td style="text-align: right;">${outQty > 0 ? outQty.toLocaleString() : '-'}</td>
                         <td style="text-align: right; font-weight: bold;">${runningBal.toLocaleString()}</td>
-                        <td style="text-align: center;">นายสมชาย ใจดี</td>
                     </tr>
                 `;
             }).join('');
@@ -3231,7 +3255,6 @@
             if(selectedCat !== 'ALL') filtered = filtered.filter(i => i.category === selectedCat);
 
             let drugSum = 0, suppliesSum = 0, labSum = 0;
-            // คำนวณมูลค่ารวมทั้งสิ้นก่อนตัดแบ่งหน้า
             mainStock.forEach(item => {
                 const total = item.qty * item.unitCost;
                 if(item.category === 'เวชภัณฑ์') suppliesSum += total;
@@ -3395,8 +3418,10 @@
             `).join('');
         }
 
+        // ปรับปรุงการบันทึกการเบิกโอนยาให้รองรับวันที่จากตัวเลือกปฏิทิน
         function handleTransfer(e) {
             e.preventDefault();
+            const transferDtLocal = document.getElementById('transfer-date').value;
             const drugName = document.getElementById('transfer-drug-search').value.trim();
             const lotSelect = document.getElementById('transfer-lot-select');
             const selectedLot = lotSelect.value;
@@ -3416,14 +3441,24 @@
                 subStock.push({ name: mainItem.name, category: mainItem.category || 'ยาทั่วไป', qty: qty, unit: mainItem.unit, unitCost: mainItem.unitCost, lot: mainItem.lot || '-' });
             }
 
-            const now = new Date().toLocaleString('th-TH');
-            const isoNow = getTodayISODate();
+            const customDateTimeText = formatThaiDateTimeFromLocal(transferDtLocal);
+            const isoDatePart = transferDtLocal ? transferDtLocal.split('T')[0] : getTodayISODate();
             const author = currentUser ? currentUser.fullname : 'นายสมชาย ใจดี';
-            historyLogs.unshift({ date: now, isoDate: isoNow, type: 'เบิกโอนเข้าคลังย่อย', name: mainItem.name, qty: qty, totalCost: qty * mainItem.unitCost, note: `วัตถุประสงค์: ${purpose} [Lot: ${selectedLot}] (โดย: ${author})` });
+
+            historyLogs.unshift({ 
+                date: customDateTimeText, 
+                isoDate: isoDatePart, 
+                type: 'เบิกโอนเข้าคลังย่อย', 
+                name: mainItem.name, 
+                qty: qty, 
+                totalCost: qty * mainItem.unitCost, 
+                note: `วัตถุประสงค์: ${purpose} [Lot: ${selectedLot}] (โดย: ${author})` 
+            });
 
             syncToCloud();
             alert('บันทึกการเบิกโอนยาเข้าคลังย่อยสำเร็จ!');
             document.getElementById('transfer-form').reset();
+            document.getElementById('transfer-date').value = getNowDateTimeLocal();
             document.getElementById('transfer-max').value = '-';
             renderAll();
         }
@@ -3512,7 +3547,6 @@
             const now = new Date().toLocaleString('th-TH');
             const isoNow = getTodayISODate();
 
-            // บันทึกจดจำรายการยาที่พิมพ์เพิ่มอัตโนมัติ
             if (name && !masterDrugList.includes(name)) {
                 masterDrugList.push(name);
                 localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
