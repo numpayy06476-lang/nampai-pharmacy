@@ -396,6 +396,13 @@
                             </tfoot>
                         </table>
                     </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                        <span id="main-pagination-info" class="text-slate-500">แสดงหน้า 1 จาก 1</span>
+                        <div class="space-x-1">
+                            <button onclick="changeMainPage(-1)" class="px-3 py-1 bg-white border rounded hover:bg-slate-100">ก่อนหน้า</button>
+                            <button onclick="changeMainPage(1)" class="px-3 py-1 bg-white border rounded hover:bg-slate-100">ถัดไป</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- SUB STORE -->
@@ -457,6 +464,13 @@
                                 </tr>
                             </tfoot>
                         </table>
+                    </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                        <span id="sub-pagination-info" class="text-slate-500">แสดงหน้า 1 จาก 1</span>
+                        <div class="space-x-1">
+                            <button onclick="changeSubPage(-1)" class="px-3 py-1 bg-white border rounded hover:bg-slate-100">ก่อนหน้า</button>
+                            <button onclick="changeSubPage(1)" class="px-3 py-1 bg-white border rounded hover:bg-slate-100">ถัดไป</button>
+                        </div>
                     </div>
                 </div>
 
@@ -1736,10 +1750,14 @@
         let consumerEstabs = [];
 
         let cloudUrl = localStorage.getItem('nam_pai_cloud_url') || '';
+        let activeTab = localStorage.getItem('nam_pai_active_tab') || 'dashboard';
+
+        let mainCurrentPage = 1;
+        let subCurrentPage = 1;
         let tempCurrentPage = 1;
         let fridgeCurrentPage = 1;
         let historyCurrentPage = 1;
-        const rowsPerPage = 20;
+        const rowsPerPage = 10; // ปรับให้แสดง 10 รายการต่อหน้าตามต้องการ
 
         let roomChartInstance = null;
         let fridgeChartInstance = null;
@@ -2025,7 +2043,7 @@
                 const savedMaster = JSON.parse(localStorage.getItem('nam_pai_master_drugs'));
                 if(savedMaster) masterDrugList = [...new Set([...masterDrugList, ...savedMaster])];
                 updateCloudStatusUI();
-                renderAll();
+                switchTab(activeTab, false);
                 return;
             }
 
@@ -2067,10 +2085,13 @@
                 consumerEstabs = JSON.parse(localStorage.getItem('nam_pai_consumer')) || [];
                 updateCloudStatusUI(false);
             }
-            renderAll();
+            switchTab(activeTab, false);
         }
 
-        function switchTab(tabId) {
+        function switchTab(tabId, save = true) {
+            activeTab = tabId;
+            if(save) localStorage.setItem('nam_pai_active_tab', activeTab);
+
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('aside button').forEach(btn => {
                 if(!btn.onclick.toString().includes('toggleMobileSidebar')) {
@@ -2078,7 +2099,9 @@
                 }
             });
 
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const targetContent = document.getElementById(`tab-${tabId}`);
+            if(targetContent) targetContent.classList.remove('hidden');
+
             const activeBtn = document.getElementById(`nav-${tabId}`);
             if(activeBtn) {
                 activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition bg-emerald-700 text-white shadow-sm";
@@ -2958,7 +2981,6 @@
         }
 
         function openAlertModal() {
-            // ปรับกรองเฉพาะรายการยาที่ใกล้หมดอายุภายใน 3 เดือน
             const expiringItems = mainStock.filter(i => isExpiringWithinMonths(i.exp, 3));
             const tbody = document.getElementById('alert-table-body');
             if(expiringItems.length === 0) {
@@ -3004,8 +3026,10 @@
 
         function printMainStockSummary() {
             const selectedMonth = document.getElementById('main-store-month').value;
+            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ปัจจุบัน';
+
             document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังใหญ่";
-            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${selectedMonth ? selectedMonth : 'ปัจจุบัน'}`;
+            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${formattedMonthText}`;
             
             let grandTotal = 0;
             const tbody = document.getElementById('print-summary-table-body');
@@ -3030,8 +3054,10 @@
 
         function printSubStockSummary() {
             const selectedMonth = document.getElementById('sub-store-month').value;
+            let formattedMonthText = selectedMonth ? `${thaiMonths[parseInt(selectedMonth.split('-')[1]) - 1]} พ.ศ. ${parseInt(selectedMonth.split('-')[0]) + 543}` : 'ปัจจุบัน';
+
             document.getElementById('print-summary-title').innerText = "รายงานสรุปมูลค่าคงเหลือคลังย่อย";
-            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${selectedMonth ? selectedMonth : 'ปัจจุบัน'}`;
+            document.getElementById('print-summary-date').innerText = `รอบเดือน: ${formattedMonthText}`;
             
             let grandTotal = 0;
             const tbody = document.getElementById('print-summary-table-body');
@@ -3182,9 +3208,20 @@
             document.getElementById('dash-main-items').innerText = `${mainStock.length} รายการ`;
             document.getElementById('dash-sub-items').innerText = `${fiscalLogs.length} รายการเบิกโอนในปีงบ`;
 
-            // ปรับการคำนวณนับเฉพาะรายการที่ใกล้หมดอายุภายใน 3 เดือน
             const expiringCount = mainStock.filter(i => isExpiringWithinMonths(i.exp, 3)).length;
             document.getElementById('dash-alert-count').innerText = expiringCount;
+        }
+
+        function changeMainPage(direction) {
+            const selectedCat = document.getElementById('main-category-filter').value;
+            let filtered = mainStock;
+            if(selectedCat !== 'ALL') filtered = filtered.filter(i => i.category === selectedCat);
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+
+            mainCurrentPage += direction;
+            if (mainCurrentPage < 1) mainCurrentPage = 1;
+            if (mainCurrentPage > totalPages) mainCurrentPage = totalPages;
+            renderMainStock();
         }
 
         function renderMainStock() {
@@ -3194,38 +3231,60 @@
             if(selectedCat !== 'ALL') filtered = filtered.filter(i => i.category === selectedCat);
 
             let drugSum = 0, suppliesSum = 0, labSum = 0;
-            if (filtered.length === 0) {
+            // คำนวณมูลค่ารวมทั้งสิ้นก่อนตัดแบ่งหน้า
+            mainStock.forEach(item => {
+                const total = item.qty * item.unitCost;
+                if(item.category === 'เวชภัณฑ์') suppliesSum += total;
+                else if(item.category === 'วัสดุวิทยาศาสตร์การแพทย์') labSum += total;
+                else drugSum += total;
+            });
+
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            if (mainCurrentPage > totalPages) mainCurrentPage = totalPages;
+            const startIdx = (mainCurrentPage - 1) * rowsPerPage;
+            const pageItems = filtered.slice(startIdx, startIdx + rowsPerPage);
+
+            document.getElementById('main-pagination-info').innerText = `แสดงหน้า ${mainCurrentPage} จาก ${totalPages} (รวม ${filtered.length} รายการ)`;
+
+            if (pageItems.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ไม่พบข้อมูลรายการยาในคลังใหญ่</td></tr>`;
-                return;
+            } else {
+                tbody.innerHTML = pageItems.map(item => {
+                    const rowTotal = item.qty * item.unitCost;
+                    return `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                            <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
+                            <td class="p-3 text-right font-bold text-blue-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                            <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
+                            <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
+                            <td class="p-3 text-xs text-slate-500">${formatThaiDate(item.exp)}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
+                            <td class="p-3 text-center space-x-1 whitespace-nowrap">
+                                <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
+                                <button onclick="editDrug('main', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs p-1" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteDrug('main', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs p-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
             }
-
-            tbody.innerHTML = filtered.map(item => {
-                const rowTotal = item.qty * item.unitCost;
-                if(item.category === 'เวชภัณฑ์') suppliesSum += rowTotal;
-                else if(item.category === 'วัสดุวิทยาศาสตร์การแพทย์') labSum += rowTotal;
-                else drugSum += rowTotal;
-
-                return `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 font-semibold text-slate-800">${item.name}</td>
-                        <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
-                        <td class="p-3 text-right font-bold text-blue-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
-                        <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
-                        <td class="p-3 text-xs text-slate-500">${formatThaiDate(item.exp)}${item.lot ? ' (Lot: ' + item.lot + ')' : ''}</td>
-                        <td class="p-3 text-center space-x-1 whitespace-nowrap">
-                            <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
-                            <button onclick="editDrug('main', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs p-1" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteDrug('main', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs p-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
 
             document.getElementById('main-drug-sum-footer').innerText = `฿${formatMoney(drugSum)}`;
             document.getElementById('main-supplies-sum-footer').innerText = `฿${formatMoney(suppliesSum)}`;
             document.getElementById('main-lab-sum-footer').innerText = `฿${formatMoney(labSum)}`;
             document.getElementById('main-total-sum-footer').innerText = `฿${formatMoney(drugSum + suppliesSum + labSum)}`;
+        }
+
+        function changeSubPage(direction) {
+            const selectedCat = document.getElementById('sub-category-filter').value;
+            let filtered = subStock;
+            if(selectedCat !== 'ALL') filtered = filtered.filter(i => i.category === selectedCat);
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+
+            subCurrentPage += direction;
+            if (subCurrentPage < 1) subCurrentPage = 1;
+            if (subCurrentPage > totalPages) subCurrentPage = totalPages;
+            renderSubStock();
         }
 
         function renderSubStock() {
@@ -3235,35 +3294,44 @@
             if(selectedCat !== 'ALL') filtered = filtered.filter(i => i.category === selectedCat);
 
             let drugSum = 0, suppliesSum = 0, labSum = 0;
-            if (filtered.length === 0) {
+            subStock.forEach(item => {
+                const total = item.qty * item.unitCost;
+                if(item.category === 'เวชภัณฑ์') suppliesSum += total;
+                else if(item.category === 'วัสดุวิทยาศาสตร์การแพทย์') labSum += total;
+                else drugSum += total;
+            });
+
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            if (subCurrentPage > totalPages) subCurrentPage = totalPages;
+            const startIdx = (subCurrentPage - 1) * rowsPerPage;
+            const pageItems = filtered.slice(startIdx, startIdx + rowsPerPage);
+
+            document.getElementById('sub-pagination-info').innerText = `แสดงหน้า ${subCurrentPage} จาก ${totalPages} (รวม ${filtered.length} รายการ)`;
+
+            if (pageItems.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ไม่พบข้อมูลในคลังย่อย</td></tr>`;
-                return;
+            } else {
+                tbody.innerHTML = pageItems.map(item => {
+                    const rowTotal = item.qty * item.unitCost;
+                    const mainRef = mainStock.find(m => m.name === item.name);
+                    const lotText = item.lot || (mainRef ? mainRef.lot : '-');
+                    return `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                            <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
+                            <td class="p-3 text-right font-bold text-indigo-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
+                            <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
+                            <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
+                            <td class="p-3 text-xs text-slate-500 font-mono">${lotText}</td>
+                            <td class="p-3 text-center space-x-1 whitespace-nowrap">
+                                <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
+                                <button onclick="editDrug('sub', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs p-1" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteDrug('sub', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs p-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
             }
-
-            tbody.innerHTML = filtered.map(item => {
-                const rowTotal = item.qty * item.unitCost;
-                if(item.category === 'เวชภัณฑ์') suppliesSum += rowTotal;
-                else if(item.category === 'วัสดุวิทยาศาสตร์การแพทย์') labSum += rowTotal;
-                else drugSum += rowTotal;
-
-                const mainRef = mainStock.find(m => m.name === item.name);
-                const lotText = item.lot || (mainRef ? mainRef.lot : '-');
-                return `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 font-semibold text-slate-800">${item.name}</td>
-                        <td class="p-3"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">${item.category || 'ยาทั่วไป'}</span></td>
-                        <td class="p-3 text-right font-bold text-indigo-600">${parseInt(item.qty).toLocaleString()} ${item.unit}</td>
-                        <td class="p-3 text-right">฿${formatMoney(item.unitCost)}</td>
-                        <td class="p-3 text-right font-semibold text-slate-700">฿${formatMoney(rowTotal)}</td>
-                        <td class="p-3 text-xs text-slate-500 font-mono">${lotText}</td>
-                        <td class="p-3 text-center space-x-1 whitespace-nowrap">
-                            <button onclick="viewDrugStockCard('${item.name}')" class="text-emerald-700 hover:text-emerald-900 text-xs p-1" title="Stock Card"><i class="fa-solid fa-id-card"></i></button>
-                            <button onclick="editDrug('sub', '${item.name}')" class="text-blue-600 hover:text-blue-800 text-xs p-1" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteDrug('sub', '${item.name}')" class="text-rose-600 hover:text-rose-800 text-xs p-1" title="ลบ"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
 
             document.getElementById('sub-drug-sum-footer').innerText = `฿${formatMoney(drugSum)}`;
             document.getElementById('sub-supplies-sum-footer').innerText = `฿${formatMoney(suppliesSum)}`;
@@ -3444,8 +3512,11 @@
             const now = new Date().toLocaleString('th-TH');
             const isoNow = getTodayISODate();
 
+            // บันทึกจดจำรายการยาที่พิมพ์เพิ่มอัตโนมัติ
             if (name && !masterDrugList.includes(name)) {
                 masterDrugList.push(name);
+                localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
+                refreshDrugDatalist();
             }
 
             if (isEdit) {
