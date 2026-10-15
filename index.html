@@ -928,7 +928,7 @@
                                         <th class="p-3">วันที่รายงาน</th>
                                         <th class="p-3">ชื่อ - สกุล</th>
                                         <th class="p-3">เลขบัตรประชาชน</th>
-                                        <th class="p-3">ที่อยู่ / เบอร์โทร</th>
+                                        <th class="p-3">ที่อยู่ / หมู่บ้าน / เบอร์โทร</th>
                                         <th class="p-3">ชื่อยาที่แพ้</th>
                                         <th class="p-3 text-center">บัตรแพ้ยา</th>
                                         <th class="p-3">แหล่งข้อมูล / สถานะ</th>
@@ -966,7 +966,7 @@
                                     <tr>
                                         <th class="p-3">ชื่อ - สกุล</th>
                                         <th class="p-3">เลขบัตรประชาชน</th>
-                                        <th class="p-3">ที่อยู่ / เบอร์โทร</th>
+                                        <th class="p-3">ที่อยู่ / หมู่บ้าน / เบอร์โทร</th>
                                         <th class="p-3">สถานที่รับยา Warfarin / สถานะ</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -1110,13 +1110,24 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่</label>
-                        <input type="text" id="allergy-address" class="w-full border rounded-lg p-2 text-sm" placeholder="บ้านเลขที่, หมู่บ้าน">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">หมู่บ้าน *</label>
+                        <select id="allergy-village" class="w-full border rounded-lg p-2 text-sm font-medium bg-white" required>
+                            <option value="หมู่ 1 บ้านน้ำปาย ต.น้ำปาย">หมู่ 1 บ้านน้ำปาย ต.น้ำปาย</option>
+                            <option value="หมู่ 2 บ้านป่าสัก ต.น้ำปาย">หมู่ 2 บ้านป่าสัก ต.น้ำปาย</option>
+                            <option value="หมู่ 3 บ้านห้วยกอม ต.น้ำปาย">หมู่ 3 บ้านห้วยกอม ต.น้ำปาย</option>
+                            <option value="หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย">หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย</option>
+                            <option value="หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย">หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย</option>
+                            <option value="หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย">หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">เบอร์โทรติดต่อ</label>
                         <input type="text" id="allergy-phone" class="w-full border rounded-lg p-2 text-sm" placeholder="เบอร์โทรศัพท์">
                     </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่เพิ่มเติม / บ้านเลขที่</label>
+                    <input type="text" id="allergy-address" class="w-full border rounded-lg p-2 text-sm" placeholder="บ้านเลขที่, ถนน (ถ้ามี)">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อยาที่แพ้ *</label>
@@ -1175,9 +1186,22 @@
                         <input type="text" id="warfarin-phone" class="w-full border rounded-lg p-2 text-sm" placeholder="เบอร์โทรศัพท์">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่ *</label>
-                    <input type="text" id="warfarin-address" class="w-full border rounded-lg p-2 text-sm" placeholder="บ้านเลขที่, หมู่บ้าน" required>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">หมู่บ้าน *</label>
+                        <select id="warfarin-village" class="w-full border rounded-lg p-2 text-sm font-medium bg-white" required>
+                            <option value="หมู่ 1 บ้านน้ำปาย ต.น้ำปาย">หมู่ 1 บ้านน้ำปาย ต.น้ำปาย</option>
+                            <option value="หมู่ 2 บ้านป่าสัก ต.น้ำปาย">หมู่ 2 บ้านป่าสัก ต.น้ำปาย</option>
+                            <option value="หมู่ 3 บ้านห้วยกอม ต.น้ำปาย">หมู่ 3 บ้านห้วยกอม ต.น้ำปาย</option>
+                            <option value="หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย">หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย</option>
+                            <option value="หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย">หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย</option>
+                            <option value="หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย">หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่เพิ่มเติม / บ้านเลขที่</label>
+                        <input type="text" id="warfarin-address" class="w-full border rounded-lg p-2 text-sm" placeholder="บ้านเลขที่ (ถ้ามี)">
+                    </div>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">รับยา Warfarin จากสถานบริการ *</label>
@@ -1223,8 +1247,15 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อหมู่บ้าน *</label>
-                        <input type="text" id="consumer-village" class="w-full border rounded-lg p-2 text-sm" placeholder="เช่น บ้านน้ำปาย" required>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">หมู่บ้าน *</label>
+                        <select id="consumer-village" class="w-full border rounded-lg p-2 text-sm font-medium bg-white" required>
+                            <option value="หมู่ 1 บ้านน้ำปาย ต.น้ำปาย">หมู่ 1 บ้านน้ำปาย ต.น้ำปาย</option>
+                            <option value="หมู่ 2 บ้านป่าสัก ต.น้ำปาย">หมู่ 2 บ้านป่าสัก ต.น้ำปาย</option>
+                            <option value="หมู่ 3 บ้านห้วยกอม ต.น้ำปาย">หมู่ 3 บ้านห้วยกอม ต.น้ำปาย</option>
+                            <option value="หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย">หมู่ 4 บ้านกิ่วกอก ต.น้ำปาย</option>
+                            <option value="หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย">หมู่ 5 บ้านห้วยทรายมูล ต.น้ำปาย</option>
+                            <option value="หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย">หมู่ 6 บ้านต๋อซ้อ ต.น้ำปาย</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">เบอร์โทรติดต่อ</label>
@@ -1232,7 +1263,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่เพิ่มเติม</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ที่อยู่เพิ่มเติม / บ้านเลขที่</label>
                     <input type="text" id="consumer-address" class="w-full border rounded-lg p-2 text-sm" placeholder="บ้านเลขที่ ถนน ฯลฯ">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1548,7 +1579,7 @@
                     <th style="width: 10%;">วันที่รายงาน</th>
                     <th style="width: 18%;">ชื่อ - สกุล</th>
                     <th style="width: 13%;">เลขบัตรประชาชน</th>
-                    <th style="width: 16%;">ที่อยู่ / เบอร์โทร</th>
+                    <th style="width: 16%;">ที่อยู่ / หมู่บ้าน / เบอร์โทร</th>
                     <th style="width: 14%;">ชื่อยาที่แพ้</th>
                     <th style="width: 7%; text-align:center;">บัตรแพ้ยา</th>
                     <th style="width: 17%;">แหล่งข้อมูล / สถานะ</th>
@@ -1583,7 +1614,7 @@
                     <th style="width: 6%;">ลำดับ</th>
                     <th style="width: 25%;">ชื่อ - สกุล</th>
                     <th style="width: 18%;">เลขบัตรประชาชน</th>
-                    <th style="width: 26%;">ที่อยู่ / เบอร์โทร</th>
+                    <th style="width: 26%;">ที่อยู่ / หมู่บ้าน / เบอร์โทร</th>
                     <th style="width: 25%;">สถานที่รับยา Warfarin / สถานะ</th>
                 </tr>
             </thead>
@@ -2130,6 +2161,7 @@
             document.getElementById('allergy-date').value = getTodayISODate();
             document.getElementById('allergy-name').value = '';
             document.getElementById('allergy-cid').value = '';
+            document.getElementById('allergy-village').value = 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('allergy-address').value = '';
             document.getElementById('allergy-phone').value = '';
             document.getElementById('allergy-drug').value = '';
@@ -2160,6 +2192,7 @@
             const reportDate = document.getElementById('allergy-date').value;
             const name = document.getElementById('allergy-name').value.trim();
             const cid = document.getElementById('allergy-cid').value.trim();
+            const village = document.getElementById('allergy-village').value;
             const address = document.getElementById('allergy-address').value.trim();
             const phone = document.getElementById('allergy-phone').value.trim();
             const drug = document.getElementById('allergy-drug').value.trim();
@@ -2172,6 +2205,7 @@
                 existing.reportDate = reportDate;
                 existing.name = name;
                 existing.cid = cid;
+                existing.village = village;
                 existing.address = address;
                 existing.phone = phone;
                 existing.drug = drug;
@@ -2179,7 +2213,7 @@
                 existing.source = source;
                 alert('แก้ไขข้อมูลผู้ป่วยแพ้ยาสำเร็จ!');
             } else {
-                const item = { reportDate, name, cid, address, phone, drug, hasCard, source, status: 'ปกติ', dischargeReason: '' };
+                const item = { reportDate, name, cid, village, address, phone, drug, hasCard, source, status: 'ปกติ', dischargeReason: '' };
                 allergyPatients.unshift(item);
                 alert('บันทึกทะเบียนผู้ป่วยแพ้ยาสำเร็จ!');
             }
@@ -2196,12 +2230,13 @@
             }
             tbody.innerHTML = allergyPatients.map((item, idx) => {
                 const isDischarged = item.status === 'จำหน่าย';
+                const fullAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}${item.phone ? '<br>โทร: ' + item.phone : ''}`;
                 return `
                     <tr class="hover:bg-slate-50 transition ${isDischarged ? 'bg-slate-100 opacity-75' : ''}">
                         <td class="p-3 text-xs text-slate-600">${formatThaiDate(item.reportDate)}</td>
                         <td class="p-3 font-semibold text-slate-800">${item.name}</td>
                         <td class="p-3 font-mono text-xs">${item.cid || '-'}</td>
-                        <td class="p-3 text-xs text-slate-600">${item.address || '-'}${item.phone ? '<br>โทร: ' + item.phone : ''}</td>
+                        <td class="p-3 text-xs text-slate-600">${fullAddress}</td>
                         <td class="p-3 text-rose-700 font-bold">${item.drug}</td>
                         <td class="p-3 text-center"><span class="px-2 py-0.5 text-xs rounded font-bold ${item.hasCard === 'มี' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${item.hasCard}</span></td>
                         <td class="p-3 text-xs">
@@ -2225,6 +2260,7 @@
             document.getElementById('allergy-date').value = item.reportDate || getTodayISODate();
             document.getElementById('allergy-name').value = item.name;
             document.getElementById('allergy-cid').value = item.cid || '';
+            document.getElementById('allergy-village').value = item.village || 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('allergy-address').value = item.address || '';
             document.getElementById('allergy-phone').value = item.phone || '';
             document.getElementById('allergy-drug').value = item.drug;
@@ -2257,13 +2293,14 @@
             } else {
                 tbody.innerHTML = allergyPatients.map((item, idx) => {
                     const isDischarged = item.status === 'จำหน่าย';
+                    const fullAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}${item.phone ? ' โทร: ' + item.phone : ''}`;
                     return `
                         <tr>
                             <td style="text-align: center;">${idx + 1}</td>
                             <td>${formatThaiDate(item.reportDate)}</td>
                             <td style="font-weight: bold;">${item.name}</td>
                             <td style="font-family: monospace;">${item.cid || '-'}</td>
-                            <td>${item.address || '-'}${item.phone ? ' (โทร: ' + item.phone + ')' : ''}</td>
+                            <td>${fullAddress}</td>
                             <td style="color: #9f1239; font-weight: bold;">${item.drug}</td>
                             <td style="text-align: center;">${item.hasCard}</td>
                             <td>${isDischarged ? '<b>จำหน่าย:</b> ' + item.dischargeReason : item.source}</td>
@@ -2281,6 +2318,7 @@
             document.getElementById('warfarin-name').value = '';
             document.getElementById('warfarin-cid').value = '';
             document.getElementById('warfarin-phone').value = '';
+            document.getElementById('warfarin-village').value = 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('warfarin-address').value = '';
             document.getElementById('warfarin-hospital').value = 'รพ.แม่จริม';
             document.getElementById('warfarin-hospital-other').value = '';
@@ -2308,6 +2346,7 @@
             const name = document.getElementById('warfarin-name').value.trim();
             const cid = document.getElementById('warfarin-cid').value.trim();
             const phone = document.getElementById('warfarin-phone').value.trim();
+            const village = document.getElementById('warfarin-village').value;
             const address = document.getElementById('warfarin-address').value.trim();
             let hospital = document.getElementById('warfarin-hospital').value;
             if(hospital === 'สถานบริการอื่นๆ') hospital = 'อื่นๆ: ' + document.getElementById('warfarin-hospital-other').value.trim();
@@ -2317,11 +2356,12 @@
                 existing.name = name;
                 existing.cid = cid;
                 existing.phone = phone;
+                existing.village = village;
                 existing.address = address;
                 existing.hospital = hospital;
                 alert('แก้ไขข้อมูลผู้ป่วย Warfarin สำเร็จ!');
             } else {
-                const item = { name, cid, phone, address, hospital, status: 'ปกติ', dischargeReason: '' };
+                const item = { name, cid, phone, village, address, hospital, status: 'ปกติ', dischargeReason: '' };
                 warfarinPatients.unshift(item);
                 alert('บันทึกทะเบียนผู้ป่วย Warfarin สำเร็จ!');
             }
@@ -2338,11 +2378,12 @@
             }
             tbody.innerHTML = warfarinPatients.map((item, idx) => {
                 const isDischarged = item.status === 'จำหน่าย';
+                const fullAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}${item.phone ? '<br>โทร: ' + item.phone : ''}`;
                 return `
                     <tr class="hover:bg-slate-50 transition ${isDischarged ? 'bg-slate-100 opacity-75' : ''}">
                         <td class="p-3 font-semibold text-slate-800">${item.name}</td>
                         <td class="p-3 font-mono text-xs">${item.cid || '-'}</td>
-                        <td class="p-3 text-xs text-slate-600">${item.address || '-'}${item.phone ? '<br>โทร: ' + item.phone : ''}</td>
+                        <td class="p-3 text-xs text-slate-600">${fullAddress}</td>
                         <td class="p-3 text-xs">
                             <span class="text-purple-700 font-medium">${item.hospital}</span>
                             ${isDischarged ? `<br><span class="px-2 py-0.5 rounded font-bold bg-rose-100 text-rose-800 text-[10px]">จำหน่าย: ${item.dischargeReason}</span>` : ''}
@@ -2365,6 +2406,7 @@
             document.getElementById('warfarin-name').value = item.name;
             document.getElementById('warfarin-cid').value = item.cid || '';
             document.getElementById('warfarin-phone').value = item.phone || '';
+            document.getElementById('warfarin-village').value = item.village || 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('warfarin-address').value = item.address || '';
             
             if(item.hospital.startsWith('อื่นๆ:')) {
@@ -2394,12 +2436,13 @@
             } else {
                 tbody.innerHTML = warfarinPatients.map((item, idx) => {
                     const isDischarged = item.status === 'จำหน่าย';
+                    const fullAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}${item.phone ? ' โทร: ' + item.phone : ''}`;
                     return `
                         <tr>
                             <td style="text-align: center;">${idx + 1}</td>
                             <td style="font-weight: bold;">${item.name}</td>
                             <td style="font-family: monospace;">${item.cid || '-'}</td>
-                            <td>${item.address || '-'}${item.phone ? ' (โทร: ' + item.phone + ')' : ''}</td>
+                            <td>${fullAddress}</td>
                             <td style="color: #6b21a8; font-weight: bold;">
                                 ${item.hospital}${isDischarged ? ' (จำหน่าย: ' + item.dischargeReason + ')' : ''}
                             </td>
@@ -2417,7 +2460,7 @@
             document.getElementById('consumer-store-name').value = '';
             document.getElementById('consumer-owner').value = '';
             document.getElementById('consumer-cid').value = '';
-            document.getElementById('consumer-village').value = '';
+            document.getElementById('consumer-village').value = 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('consumer-phone').value = '';
             document.getElementById('consumer-address').value = '';
             document.getElementById('consumer-type').value = 'ร้านค้าร้านชำ';
@@ -2438,7 +2481,7 @@
             const storeName = document.getElementById('consumer-store-name').value.trim();
             const owner = document.getElementById('consumer-owner').value.trim();
             const cid = document.getElementById('consumer-cid').value.trim();
-            const village = document.getElementById('consumer-village').value.trim();
+            const village = document.getElementById('consumer-village').value;
             const phone = document.getElementById('consumer-phone').value.trim();
             const address = document.getElementById('consumer-address').value.trim();
             const type = document.getElementById('consumer-type').value;
@@ -2477,12 +2520,14 @@
                 if(item.storeStatus === 'พักกิจการชั่วคราว') storeStatusBadgeClass = 'bg-amber-100 text-amber-800';
                 else if(item.storeStatus === 'ปิดกิจการ') storeStatusBadgeClass = 'bg-rose-100 text-rose-800';
 
+                const fullVillageAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}`;
+
                 return `
                     <tr class="hover:bg-slate-50 transition ${isDischarged ? 'bg-slate-100 opacity-75' : ''}">
                         <td class="p-3 font-semibold text-slate-800">${item.storeName}</td>
                         <td class="p-3"><span class="px-2 py-0.5 text-xs rounded bg-amber-100 text-amber-800 font-medium">${item.type}</span></td>
                         <td class="p-3 text-xs text-slate-700">${item.owner}${item.cid ? '<br><span class="font-mono text-[10px]">' + item.cid + '</span>' : ''}</td>
-                        <td class="p-3 text-xs text-slate-600">${item.village}${item.address ? ' (' + item.address + ')' : ''}</td>
+                        <td class="p-3 text-xs text-slate-600">${fullVillageAddress}</td>
                         <td class="p-3 text-xs text-slate-600">
                             ${item.phone || '-'}
                             <br><span class="px-2 py-0.5 text-[10px] rounded font-bold ${storeStatusBadgeClass}">${item.storeStatus || 'เปิดกิจการอยู่'}</span>
@@ -2506,7 +2551,7 @@
             document.getElementById('consumer-store-name').value = item.storeName;
             document.getElementById('consumer-owner').value = item.owner;
             document.getElementById('consumer-cid').value = item.cid || '';
-            document.getElementById('consumer-village').value = item.village;
+            document.getElementById('consumer-village').value = item.village || 'หมู่ 1 บ้านน้ำปาย ต.น้ำปาย';
             document.getElementById('consumer-phone').value = item.phone || '';
             document.getElementById('consumer-address').value = item.address || '';
             document.getElementById('consumer-type').value = item.type;
@@ -2531,13 +2576,14 @@
             } else {
                 tbody.innerHTML = consumerEstabs.map((item, idx) => {
                     const isDischarged = item.status === 'จำหน่าย';
+                    const fullVillageAddress = `${item.village || ''}${item.address ? ' (' + item.address + ')' : ''}`;
                     return `
                         <tr>
                             <td style="text-align: center;">${idx + 1}</td>
                             <td style="font-weight: bold;">${item.storeName}</td>
                             <td>${item.type}</td>
                             <td>${item.owner}${item.cid ? '<br><span style="font-family:monospace;">' + item.cid + '</span>' : ''}</td>
-                            <td>${item.village}${item.address ? ' (' + item.address + ')' : ''}</td>
+                            <td>${fullVillageAddress}</td>
                             <td>${item.phone || '-'} (${item.storeStatus || 'เปิด'}) ${isDischarged ? '<br>จำหน่าย: ' + item.dischargeReason : ''}</td>
                         </tr>
                     `;
