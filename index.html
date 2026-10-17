@@ -2021,96 +2021,81 @@
         }
 
         async function syncToCloud() {
-            localStorage.setItem('nam_pai_main', JSON.stringify(mainStock));
-            localStorage.setItem('nam_pai_sub', JSON.stringify(subStock));
-            localStorage.setItem('nam_pai_logs', JSON.stringify(historyLogs));
-            localStorage.setItem('nam_pai_temp_logs', JSON.stringify(tempLogs));
-            localStorage.setItem('nam_pai_fridge_logs', JSON.stringify(fridgeLogs));
-            localStorage.setItem('nam_pai_users', JSON.stringify(usersList));
-            localStorage.setItem('nam_pai_allergy', JSON.stringify(allergyPatients));
-            localStorage.setItem('nam_pai_warfarin', JSON.stringify(warfarinPatients));
-            localStorage.setItem('nam_pai_consumer', JSON.stringify(consumerEstabs));
-            localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
+    saveLocalStorageData(); // บันทึกลงเครื่องก่อนเสมอ
+    
+    if (!cloudUrl || !cloudUrl.trim()) return;
 
-            if (!cloudUrl) {
-                updateCloudStatusUI();
-                return;
-            }
+    const payload = {
+        mainStock: typeof mainStock !== 'undefined' ? mainStock : [],
+        subStock: typeof subStock !== 'undefined' ? subStock : [],
+        historyLogs: typeof historyLogs !== 'undefined' ? historyLogs : [],
+        tempLogs: typeof tempLogs !== 'undefined' ? tempLogs : [],
+        fridgeLogs: typeof fridgeLogs !== 'undefined' ? fridgeLogs : [],
+        usersList: typeof usersList !== 'undefined' ? usersList : [],
+        allergyPatients: typeof allergyPatients !== 'undefined' ? allergyPatients : [],
+        warfarinPatients: typeof warfarinPatients !== 'undefined' ? warfarinPatients : [],
+        consumerEstabs: typeof consumerEstabs !== 'undefined' ? consumerEstabs : [],
+        lastUpdated: new Date().toISOString()
+    };
 
-            try {
-                await fetch(cloudUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'SYNC_ALL',
-                        mainStock, subStock, historyLogs, tempLogs, fridgeLogs, usersList, allergyPatients, warfarinPatients, consumerEstabs, masterDrugList
-                    })
-                });
-                updateCloudStatusUI(true);
-            } catch (err) {
-                updateCloudStatusUI(false);
-            }
-        }
+    try {
+        await fetch(cloudUrl.trim(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+        updateCloudStatusUI(true);
+    } catch (err) {
+        console.error("Sync Error:", err);
+        updateCloudStatusUI(false);
+    }
+}
 
         async function fetchFromCloud() {
-            if (!cloudUrl) {
-                mainStock = JSON.parse(localStorage.getItem('nam_pai_main')) || [];
-                subStock = JSON.parse(localStorage.getItem('nam_pai_sub')) || [];
-                historyLogs = JSON.parse(localStorage.getItem('nam_pai_logs')) || [];
-                tempLogs = JSON.parse(localStorage.getItem('nam_pai_temp_logs')) || [];
-                fridgeLogs = JSON.parse(localStorage.getItem('nam_pai_fridge_logs')) || [];
-                allergyPatients = JSON.parse(localStorage.getItem('nam_pai_allergy')) || [];
-                warfarinPatients = JSON.parse(localStorage.getItem('nam_pai_warfarin')) || [];
-                consumerEstabs = JSON.parse(localStorage.getItem('nam_pai_consumer')) || [];
-                const savedMaster = JSON.parse(localStorage.getItem('nam_pai_master_drugs'));
-                if(savedMaster) masterDrugList = [...new Set([...masterDrugList, ...savedMaster])];
-                updateCloudStatusUI();
-                switchTab(activeTab, false);
-                return;
-            }
+    if (!cloudUrl || !cloudUrl.trim()) {
+        loadLocalStorageData(); // โหลดจากเครื่องเดิม
+        updateCloudStatusUI(false);
+        if (typeof renderActiveTab === 'function') renderActiveTab();
+        return;
+    }
 
-            try {
-                const res = await fetch(cloudUrl);
-                const data = await res.json();
-                if (data.status === 'success') {
-                    if (data.mainStock) mainStock = data.mainStock;
-                    if (data.subStock) subStock = data.subStock;
-                    if (data.historyLogs) historyLogs = data.historyLogs;
-                    if (data.tempLogs) tempLogs = data.tempLogs;
-                    if (data.fridgeLogs) fridgeLogs = data.fridgeLogs;
-                    if (data.allergyPatients) allergyPatients = data.allergyPatients;
-                    if (data.warfarinPatients) warfarinPatients = data.warfarinPatients;
-                    if (data.consumerEstabs) consumerEstabs = data.consumerEstabs;
-                    if (data.usersList && data.usersList.length > 0) usersList = data.usersList;
-                    if (data.masterDrugList) masterDrugList = [...new Set([...masterDrugList, ...data.masterDrugList])];
+    try {
+        const res = await fetch(cloudUrl.trim());
+        const textData = await res.text();
+        const data = JSON.parse(textData);
 
-                    localStorage.setItem('nam_pai_main', JSON.stringify(mainStock));
-                    localStorage.setItem('nam_pai_sub', JSON.stringify(subStock));
-                    localStorage.setItem('nam_pai_logs', JSON.stringify(historyLogs));
-                    localStorage.setItem('nam_pai_temp_logs', JSON.stringify(tempLogs));
-                    localStorage.setItem('nam_pai_fridge_logs', JSON.stringify(fridgeLogs));
-                    localStorage.setItem('nam_pai_allergy', JSON.stringify(allergyPatients));
-                    localStorage.setItem('nam_pai_warfarin', JSON.stringify(warfarinPatients));
-                    localStorage.setItem('nam_pai_consumer', JSON.stringify(consumerEstabs));
-                    localStorage.setItem('nam_pai_users', JSON.stringify(usersList));
-                    localStorage.setItem('nam_pai_master_drugs', JSON.stringify(masterDrugList));
-                    updateCloudStatusUI(true);
-                }
-            } catch (err) {
-                mainStock = JSON.parse(localStorage.getItem('nam_pai_main')) || [];
-                subStock = JSON.parse(localStorage.getItem('nam_pai_sub')) || [];
-                historyLogs = JSON.parse(localStorage.getItem('nam_pai_logs')) || [];
-                tempLogs = JSON.parse(localStorage.getItem('nam_pai_temp_logs')) || [];
-                fridgeLogs = JSON.parse(localStorage.getItem('nam_pai_fridge_logs')) || [];
-                allergyPatients = JSON.parse(localStorage.getItem('nam_pai_allergy')) || [];
-                warfarinPatients = JSON.parse(localStorage.getItem('nam_pai_warfarin')) || [];
-                consumerEstabs = JSON.parse(localStorage.getItem('nam_pai_consumer')) || [];
-                updateCloudStatusUI(false);
-            }
-            switchTab(activeTab, false);
+        if (data && (data.status === 'success' || data.mainStock || data.stock)) {
+            // ดึงข้อมูลคลังและประวัติกิจกรรม
+            if (data.mainStock) mainStock = data.mainStock;
+            if (data.subStock) subStock = data.subStock;
+            if (data.historyLogs) historyLogs = data.historyLogs;
+            if (data.tempLogs) tempLogs = data.tempLogs;
+            if (data.fridgeLogs) fridgeLogs = data.fridgeLogs;
+            if (data.usersList && data.usersList.length > 0) usersList = data.usersList;
+
+            // ดึงข้อมูล 3 ทะเบียนหลัก (ไม่ให้ข้อมูลสูญหาย)
+            if (data.allergyPatients) allergyPatients = data.allergyPatients;
+            if (data.warfarinPatients) warfarinPatients = data.warfarinPatients;
+            if (data.consumerEstabs) consumerEstabs = data.consumerEstabs;
+
+            // บันทึกสำรองไว้ใน LocalStorage ของเบราว์เซอร์
+            saveLocalStorageData();
+
+            // อัปเดตสถานะการเชื่อมต่อบน UI เป็นสีเขียว
+            updateCloudStatusUI(true);
+
+            // สั่งเรนเดอร์หน้าจอและตารางทั้งหมดทันที
+            if (typeof renderActiveTab === 'function') renderActiveTab();
+        } else {
+            throw new Error("Invalid response format");
         }
-
+    } catch (err) {
+        console.error("Fetch Cloud Error:", err);
+        loadLocalStorageData();
+        updateCloudStatusUI(false);
+        if (typeof renderActiveTab === 'function') renderActiveTab();
+    }
+}
         function switchTab(tabId, save = true) {
             activeTab = tabId;
             if(save) localStorage.setItem('nam_pai_active_tab', activeTab);
@@ -3728,23 +3713,24 @@
             alert('บันทึกการเชื่อมต่อ Cloud เรียบร้อย!');
         }
 
-        function updateCloudStatusUI(isOnline = false) {
-            const dot = document.getElementById('cloud-status-dot');
-            const txt = document.getElementById('cloud-status-text');
-            if(cloudUrl) {
-                if(isOnline) {
-                    dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
-                    txt.innerText = "สถานะ: เชื่อมต่อ Google Sheets เรียบร้อย";
-                } else {
-                    dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
-                    txt.innerText = "สถานะ: กำลังใช้งาน Offline Local Storage";
-                }
-            } else {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-slate-400";
-                txt.innerText = "สถานะ: ใช้งาน Local Storage ในเครื่อง";
-            }
-        }
+function updateCloudStatusUI(isOnline = false) {
+    const dot = document.getElementById('cloud-status-dot') || document.getElementById('statusDot');
+    const txt = document.getElementById('cloud-status-text') || document.getElementById('statusText');
+    if (!dot || !txt) return;
 
+    if (cloudUrl && cloudUrl.trim() !== "") {
+        if (isOnline) {
+            dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+            txt.innerText = "สถานะ: เชื่อมต่อ Google Sheets เรียบร้อย";
+        } else {
+            dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
+            txt.innerText = "สถานะ: ตรวจสอบการเชื่อมต่อ...";
+        }
+    } else {
+        dot.className = "w-2.5 h-2.5 rounded-full bg-slate-400";
+        txt.innerText = "สถานะ: ใช้งาน Local Storage ในเครื่อง";
+    }
+}
         window.onload = init;
     </script>
 </body>
